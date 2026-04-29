@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOSS End of Shift Form</title>
+    <script src="main.js"></script>
+    <script>
+        openDB()
+
+        async function addFamilyFromClipboard() {
+
+            let text = await navigator.clipboard.readText()
+            let split = text.split("___")
+
+            addFamily(split[1], split[2], split[3])
+
+        }
+    </script>
+</head>
+<body>
+    <h1>End of Shift Form</h1>
+    <button onclick="addFamily('test.com', 'Rundquist', 1234)">add fam</button>
+    <button onclick="getAllFamilies()">get all fams</button>
+    <button onclick="addFamilyFromClipboard()">from clipboard</button>
+    <div id="familyList"></div>
+</body>
+</html>

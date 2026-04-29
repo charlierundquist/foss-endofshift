@@ -1,0 +1,17 @@
+{
+  "name": "APV Foss",
+  "description": "Internal use only. Gets info on Family Accounts and allows them to be quickly copied to the clipboard.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
+    {
+      "js": ["main.js"],
+      "matches": [
+        "https://freestyle.fossswimschool.com/families/*"
+      ]
+    }
+  ]
+}

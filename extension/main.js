@@ -7,14 +7,38 @@ let interval = setInterval(() => {
 }, 100);
 
 function initFunc() {
-    const url = document.URL;
-    if(url.split("/")[url.split("/").length - 1] != "family-information"){
-        console.log("not right");
-        window.navigation.addEventListener("hashchange", (event) => {
-            console.log(event.newURL);
-        });
-        return;
-    }
+    let copyButton = document.createElement("button")
+    copyButton.setAttribute("type", "button")
+    copyButton.className = "c-button c-button--icon"
+    copyButton.addEventListener("click", (e) => {
+        copyInfoToClipboard(copyButton)
+    })
+    let iconDiv = document.createElement("i")
+    iconDiv.className = "icon"
+    iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("plus-solid-full.svg") + ")"
+    iconDiv.style.height = "20px"
+    iconDiv.style.width = "20px"
+    copyButton.appendChild(iconDiv)
+
+    let buttonsRow = document.querySelector(".fi-buttons-row")
+    buttonsRow.appendChild(copyButton)
+
+    let url = '';
+    const observer = new MutationObserver(function(mutations) {
+        if (location.href !== url) {
+            url = location.href;
+            if(url.split("/")[url.split("/").length - 1] != "family-information"){
+                return;
+            }
+            getFamilyInfo(url, copyButton);
+        }
+    });
+    const config = {subtree: true, childList: true};
+    observer.observe(document, config);
+    return;
+}
+
+function getFamilyInfo(url, copyButton){
     const familyNumber = url.split("details/")[1].split("/")[0];
     const name = document.querySelector(".u-details__name").getAttribute("title").split(",")[0];
     const phone = "(" + document.querySelector(".fi-info > div:nth-child(2) > div:nth-child(2)").innerHTML.split("(")[1];
@@ -34,10 +58,17 @@ function initFunc() {
                 childrenInfo += div.getAttribute("title");
                 childrenInfo += ":::";
             });
+
+            iframe.remove()
         }, 500);
     };
     document.body.appendChild(iframe);
     setTimeout(() => {
-        navigator.clipboard.writeText("FAMILYINFO___" + url + "___" + name + "___" + phone + "___" + childrenInfo);
+        copyButton.setAttribute("data-familyinfo", "FAMILYINFO___" + url + "___" + name + "___" + phone + "___" + childrenInfo);
     }, 1500);
+}
+
+function copyInfoToClipboard(element) {
+    navigator.clipboard.writeText(element.getAttribute("data-familyinfo"))
+    alert("added!")
 }

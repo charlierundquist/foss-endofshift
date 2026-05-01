@@ -13,5 +13,9 @@
         "https://freestyle.fossswimschool.com/families/*"
       ]
     }
-  ]
+  ],
+  "web_accessible_resources": [{
+    "matches": ["<all_urls>"],
+    "resources": ["plus-solid-full.svg"]
+    }]
 }

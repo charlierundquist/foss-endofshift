@@ -6,23 +6,9 @@ let interval = setInterval(() => {
     }
 }, 100);
 
+let infoLoaded = false;
+
 function initFunc() {
-    let copyButton = document.createElement("button")
-    copyButton.setAttribute("type", "button")
-    copyButton.className = "c-button c-button--icon"
-    copyButton.addEventListener("click", (e) => {
-        copyInfoToClipboard(copyButton)
-    })
-    let iconDiv = document.createElement("i")
-    iconDiv.className = "icon"
-    iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("plus-solid-full.svg") + ")"
-    iconDiv.style.height = "20px"
-    iconDiv.style.width = "20px"
-    copyButton.appendChild(iconDiv)
-
-    let buttonsRow = document.querySelector(".fi-buttons-row")
-    buttonsRow.appendChild(copyButton)
-
     let url = '';
     const observer = new MutationObserver(function(mutations) {
         if (location.href !== url) {
@@ -30,6 +16,28 @@ function initFunc() {
             if(url.split("/")[url.split("/").length - 1] != "family-information"){
                 return;
             }
+            let keyframesTag = document.createElement("style")
+            keyframesTag.textContent = "@keyframes spinning{to{transform: rotate(1turn)}}"
+            document.head.appendChild(keyframesTag)
+
+            let copyButton = document.createElement("button")
+            copyButton.setAttribute("disabled", "true")
+            copyButton.setAttribute("type", "button")
+            copyButton.className = "c-button c-button--icon"
+            copyButton.addEventListener("click", (e) => {
+                copyInfoToClipboard(copyButton)
+            })
+            let iconDiv = document.createElement("i")
+            iconDiv.className = "icon"
+            iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("spinner-solid-full.svg") + ")"
+            iconDiv.style.height = "20px"
+            iconDiv.style.width = "20px"
+            iconDiv.style.animation = "spinning 1.5s infinite linear"
+            copyButton.appendChild(iconDiv)
+
+            let buttonsRow = document.querySelector(".fi-buttons-row")
+            buttonsRow.appendChild(copyButton)
+
             getFamilyInfo(url, copyButton);
         }
     });
@@ -43,32 +51,83 @@ function getFamilyInfo(url, copyButton){
     const name = document.querySelector(".u-details__name").getAttribute("title").split(",")[0];
     const phone = "(" + document.querySelector(".fi-info > div:nth-child(2) > div:nth-child(2)").innerHTML.split("(")[1];
     let childrenInfo = "";
+    let gotChildren = false;
     let iframe = document.createElement("iframe");
     iframe.setAttribute("src", "/families/details/" + familyNumber + "/students");
     iframe.style.width = "0px";
     iframe.style.height = "0px";
     iframe.style.display = "none";
     iframe.onload = () => {
-        setTimeout(() => {
-            let studentDivs = iframe.contentWindow.document.querySelectorAll(".sw-student .u-details__name");
+        let getStudentDivsInterval = setInterval(() => {
+            let studentDivs = iframe.contentWindow.document.querySelectorAll(".sw-student");
+            if(studentDivs.length === 0) return
 
             childrenInfo += ":::";
             
             [...studentDivs].map((div, i) => {
-                childrenInfo += div.getAttribute("title");
-                childrenInfo += ":::";
+                let name = div.querySelector(".u-details__name").getAttribute("title");
+
+                childrenInfo += name
+
+                let classDivs = div.querySelectorAll(".c-list-data__row");
+                [...classDivs].map((row, i) => {
+
+                    if(!row.querySelector(".sw-session-col").innerHTML.includes("Spring 2026")){
+                        return
+                    }
+                    let statusColDiv = row.querySelector(".sw-status-col")
+                    if (statusColDiv === null){
+                        console.log("dropped")
+                        return
+                    }
+                    const statusColContent = statusColDiv.querySelector("span").innerHTML
+                    if(!statusColContent.includes("Enrolled") && !statusColContent.includes("Stay") && !statusColContent.includes("Advance")){
+                        console.log("returning")
+                        return
+                    }
+
+                    childrenInfo += "<CLASS>"
+
+                    let classLevel = "/" + row.querySelector(".sw-level-col > span").innerHTML
+                    let classDay = "/" + row.querySelector(".sw-day-col").innerHTML
+                    let classTime = "/" + row.querySelector(".sw-time-col").innerHTML
+
+                    childrenInfo += classLevel + classDay + classTime
+
+                })
+
+                childrenInfo += ":::"
+
             });
 
+            childrenInfo += ":::"
+
+            gotChildren = true
+            clearInterval(getStudentDivsInterval)
             iframe.remove()
-        }, 500);
+        }, 100);
     };
     document.body.appendChild(iframe);
-    setTimeout(() => {
+    let setClipboardInterval = setInterval(() => {
+        if(!gotChildren) return
+
         copyButton.setAttribute("data-familyinfo", "FAMILYINFO___" + url + "___" + name + "___" + phone + "___" + childrenInfo);
-    }, 1500);
+        copyButton.removeAttribute("disabled");
+        let iconDiv = copyButton.querySelector("i");
+        iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("plus-solid-full.svg") + ")";
+        iconDiv.style.animation = "";
+
+        infoLoaded = true
+        clearInterval(setClipboardInterval)
+
+    }, 100);
 }
 
 function copyInfoToClipboard(element) {
     navigator.clipboard.writeText(element.getAttribute("data-familyinfo"))
-    alert("added!")
+    let iconDiv = element.querySelector("i")
+    iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("check-solid-full.svg") + ")"
+    setTimeout(() => {
+        iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("plus-solid-full.svg") + ")"
+    }, 2000);
 }

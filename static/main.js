@@ -1,20 +1,16 @@
 const DB_NAME = "apv_foss_endofshiftform_indexeddb"
-const DB_VERSION = 1
-const DB_STORE_NAME = "families"
+const DB_VERSION = 2
+const DB_STORE_NAME = "endofshiftnotes"
 
 var db
 
-function openDB(fromIframe = false) {
+function openDB() {
     console.log("openDb ...");
     var req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onsuccess = function (evt) {
         // Equal to: db = req.result;
         db = this.result;
         console.log("openDb DONE");
-
-        if (fromIframe) {
-            addFamily("google.com", "Book", 765638)
-        }
 
     };
     req.onerror = function (evt) {
@@ -26,9 +22,8 @@ function openDB(fromIframe = false) {
       var store = evt.currentTarget.result.createObjectStore(
         DB_STORE_NAME, { keyPath: 'id', autoIncrement: true });
 
-      store.createIndex('freestylelink', 'freestylelink', { unique: false });
-      store.createIndex('famil-name', 'familyname', { unique: false });
-      store.createIndex('phonenumber', 'phonenumber', { unique: false });
+      store.createIndex('clipboardstring', 'clipboardstring', { unique: false });
+      store.createIndex('notes', 'notes', { unique: false });
     };
 }
 
@@ -50,10 +45,10 @@ function clearObjectStore() {
     };
 }
 
-function addFamily(freestyle_link, family_name, phone_number) {
+function addNote(clipboardString, notes) {
     let store = getObjectStore(DB_STORE_NAME, "readwrite")
 
-    let obj = {'freestylelink': freestyle_link, 'familyname': family_name, 'phonenumber': phone_number}
+    let obj = {'clipboardstring': clipboardString, 'notes': notes}
 
     var req;
 
@@ -64,16 +59,16 @@ function addFamily(freestyle_link, family_name, phone_number) {
     }
 
     req.onsuccess = (event) => {
-        console.log("sucessfully added family")
+        console.log("sucessfully added note")
     }
 
     req.onerror = () => {
-        console.error("addFamily error", this.error)
+        console.error("addNote error", this.error)
     }
 }
 
-function getAllFamilies(){
-    let familyList = document.createElement("div")
+function getAllNotes(){
+    let notesList = document.createElement("div")
 
     let store = getObjectStore(DB_STORE_NAME, "readonly")
 
@@ -83,28 +78,13 @@ function getAllFamilies(){
         const cursor = event.target.result
         if(cursor){
             console.log(cursor.key + ": " + cursor.value.familyname)
-            let familyDiv = document.createElement("ul")
-
-            let linkDiv = document.createElement("li")
-            linkDiv.innerText = cursor.value.freestylelink
-
-            let nameDiv = document.createElement("li")
-            nameDiv.innerText = cursor.value.familyname
-
-            let phoneDiv = document.createElement("li")
-            phoneDiv.innerText = cursor.value.phonenumber
-
-            familyDiv.appendChild(linkDiv)
-            familyDiv.appendChild(nameDiv)
-            familyDiv.appendChild(phoneDiv)
-
-            familyList.appendChild(familyDiv)
+           
             cursor.continue()
         } else {
             console.log("no more entries")
         }
 
-        document.getElementById("familyList").innerHTML = familyList.outerHTML
+        document.getElementById("notesList").innerHTML = notesList.outerHTML
     }
 
     req.onerror = (event) => {

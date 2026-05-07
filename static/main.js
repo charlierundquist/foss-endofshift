@@ -37,13 +37,15 @@ function clearObjectStore() {
     var store = getObjectStore(DB_STORE_NAME, 'readwrite');
     var req = store.clear();
     req.onsuccess = function(evt) {
-        displayActionSuccess("Store cleared");
-        displayPubList(store);
+        getAllNotes()
     };
     req.onerror = function (evt) {
         console.error("clearObjectStore:", evt.target.errorCode);
-        displayActionFailure(this.error);
     };
+}
+
+function clearAllNotes() {
+    clearObjectStore()
 }
 
 function addNote(clipboardString, notes) {
@@ -114,7 +116,8 @@ function deleteNote(data){
 }
 
 function getAllNotes(){
-    let notesList = document.createElement("div")
+    let notesList = document.getElementById("getAllNotesResult")
+    notesList.innerHTML = ""
 
     let store = getObjectStore(DB_STORE_NAME, "readonly")
 
@@ -129,10 +132,6 @@ function getAllNotes(){
             
             cursor.continue()
         }
-
-        let resultDiv = document.getElementById("getAllNotesResult")
-        resultDiv.innerHTML = ""
-        resultDiv.appendChild(notesList)
     }
 
     req.onerror = (event) => {
@@ -154,8 +153,13 @@ function renderNote(data){
     newNoteDiv.setAttribute("noteID", data.id)
     newNoteDiv.setAttribute("clipboardstring", data.clipboardstring)
     newNoteDiv.setAttribute("notes", data.notes)
-    let newInfoCol = document.createElement("div")
-    let newNotesCol = document.createElement("div")
+    newNoteDiv.style.display = "flex"
+    newNoteDiv.style.gap = "3rem"
+    newNoteDiv.style.marginTop = "1rem"
+
+    let col1 = document.createElement("div")
+    let col2 = document.createElement("div")
+    let col3 = document.createElement("div")
     
     let split = data.clipboardstring.split("___")
 
@@ -164,52 +168,51 @@ function renderNote(data){
     const phoneNumber = split[3]
     const childrenList = split[4]
 
+    col1.style.display = "grid"
+    col1.style.justifyContent = "center"
     let deleteButton = document.createElement("button")
     deleteButton.innerHTML = "x"
+    deleteButton.style.height = "25px"
+    deleteButton.style.width = "25px"
     deleteButton.onclick = () => {
         deleteNote(data)
     }
-    newNoteDiv.appendChild(deleteButton)
-
-    let linkRow = document.createElement("p")
+    col1.appendChild(deleteButton)
+    
     let linkDiv = document.createElement("a")
+    linkDiv.classList.add("button")
+    linkDiv.style.height = "25px"
+    linkDiv.style.width = "25px"
+    linkDiv.style.textAlign = "center"
+    linkDiv.style.padding = "0px"
+    linkDiv.style.fontWeight = "normal"
+    linkDiv.style.fontSize = "16px"
     linkDiv.setAttribute("href", freestyleLink)
     linkDiv.setAttribute("target", "_blank")
-    linkDiv.innerHTML = "View in Freestyle"
-    linkRow.appendChild(linkDiv)
-    newNoteDiv.appendChild(linkRow)
+    linkDiv.innerHTML = "i"
 
-
-    let nameRow = document.createElement("p")
-    let nameDiv = document.createElement("span")
-    nameDiv.innerHTML = familyName
-    nameRow.appendChild(nameDiv)
-    newNoteDiv.appendChild(nameRow)
-
-
-    let phoneRow = document.createElement("p")
-    let phoneDiv = document.createElement("span")
-    phoneDiv.innerHTML = phoneNumber
-    phoneRow.appendChild(phoneDiv)
-    newNoteDiv.appendChild(phoneRow)
-
-
+    let mainInfoDiv = document.createElement("span")
+    mainInfoDiv.style.display = "block"
+    mainInfoDiv.style.fontSize = "20px"
+    mainInfoDiv.style.fontWeight = "bold"
+    mainInfoDiv.innerHTML = familyName + " | " + phoneNumber + " | " + linkDiv.outerHTML
+    col2.appendChild(mainInfoDiv)
+    col2.style.width = "fit-content"
+    
+    let childrenUL = document.createElement("ul")
+    childrenUL.style.paddingLeft = "16px"
+    childrenUL.style.marginBlock = "2px"
     let childrenListSplit = childrenList.split(":::")
     childrenListSplit.map((child, i) => {
 
         if(child === "") return
 
-        let newChildParent = document.createElement("div")
-        newChildParent.style.marginLeft = "1rem"
+        let childLI = document.createElement("li")
 
         let classSplit = child.split("<CLASS>")
         let cName = classSplit[0]
 
-        let cNameRow = document.createElement("p")
-        let cNameDiv = document.createElement("span")
-        cNameDiv.innerHTML = cName
-        cNameRow.appendChild(cNameDiv)
-        newChildParent.appendChild(cNameRow)
+        childLI.innerHTML = cName
 
         if (classSplit.length > 1){
             let classInfo = classSplit[1].split("/")
@@ -218,29 +221,19 @@ function renderNote(data){
             let classDay = classInfo[2]
             let classTime = classInfo[3]
 
-            let classRow = document.createElement("p")
-
-            let levelDiv = document.createElement("span")
-            levelDiv.innerHTML = classLevel + " | "
-            classRow.appendChild(levelDiv)
-
-            let dayDiv = document.createElement("span")
-            dayDiv.innerHTML = classDay + " | "
-            classRow.appendChild(dayDiv)
-
-            let timeDiv = document.createElement("span")
-            timeDiv.innerHTML = classTime
-            classRow.appendChild(timeDiv)
-
-            newChildParent.appendChild(classRow)
+            childLI.innerHTML += "  -  " + classLevel + " | " + classDay + " | " + classTime
 
         }
 
-        newNoteDiv.appendChild(newChildParent)
+        childrenUL.appendChild(childLI)
     })
+    col2.appendChild(childrenUL)
 
-    newNoteDiv.appendChild(newInfoCol)
-    newNoteDiv.appendChild(renderNotesBox(data))
+    col3.appendChild(renderNotesBox(data))
+
+    newNoteDiv.appendChild(col1)
+    newNoteDiv.appendChild(col2)
+    newNoteDiv.appendChild(col3)
 
     return newNoteDiv
 }
@@ -248,14 +241,18 @@ function renderNote(data){
 function renderNotesBox(data){
 
     let notesParent = document.createElement("div")
+    notesParent.style.height = "100%"
+    notesParent.style.width = "60ch"
+    notesParent.style.placeContent = "center"
     if(data.notes === ""){
         let textBox = document.createElement("textarea")
+        textBox.style.width = "100%"
+        textBox.style.height = "100%"
         let submitButton = document.createElement("button")
         submitButton.innerHTML = "Add Note"
         submitButton.onclick = () => {
             data.notes = textBox.value
             updateNote(data)
-            getAllNotes()
         }
         notesParent.appendChild(textBox)
         notesParent.appendChild(submitButton)

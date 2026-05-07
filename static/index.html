@@ -8,10 +8,22 @@
     <script>
         openDB()
     </script>
+    <style>
+        a.button {
+            padding: 1px 6px;
+            border: 1px outset buttonborder;
+            border-radius: 3px;
+            color: buttontext;
+            background-color: buttonface;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
     <h1>End of Shift Form</h1>
     <button onclick="addNoteFromClipboard()">New Note</button>
+    <button onclick="clearAllNotes()">Clear All</button>
     <div id="getAllNotesResult"></div>
 </body>
 </html>

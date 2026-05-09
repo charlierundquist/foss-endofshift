@@ -144,7 +144,6 @@ async function addNoteFromClipboard() {
     let clipboardString = await navigator.clipboard.readText()
 
     addNote(clipboardString, "")
-    getAllNotes()
 
 }
 
@@ -154,8 +153,9 @@ function renderNote(data){
     newNoteDiv.setAttribute("clipboardstring", data.clipboardstring)
     newNoteDiv.setAttribute("notes", data.notes)
     newNoteDiv.style.display = "flex"
-    newNoteDiv.style.gap = "3rem"
     newNoteDiv.style.marginTop = "1rem"
+    newNoteDiv.style.backgroundColor = "#bbb"
+    newNoteDiv.style.borderRadius = "5px"
 
     let col1 = document.createElement("div")
     let col2 = document.createElement("div")
@@ -169,39 +169,55 @@ function renderNote(data){
     const childrenList = split[4]
 
     col1.style.display = "grid"
-    col1.style.justifyContent = "center"
+    col1.style.alignContent = "center"
     let deleteButton = document.createElement("button")
     deleteButton.innerHTML = "x"
     deleteButton.style.height = "25px"
     deleteButton.style.width = "25px"
+    deleteButton.style.marginInline = "0.5rem"
+    deleteButton.style.backgroundColor = "transparent"
+    deleteButton.style.border = "none"
+    deleteButton.style.cursor = "pointer"
+    deleteButton.style.fontSize = "1rem"
     deleteButton.onclick = () => {
         deleteNote(data)
     }
     col1.appendChild(deleteButton)
     
+    let linkParentDiv = document.createElement("div")
+    linkParentDiv.style.display = "inline-block"
+    linkParentDiv.style.width = "20px"
+    linkParentDiv.style.height = "20px"
+    linkParentDiv.style.borderRadius = "100%"
     let linkDiv = document.createElement("a")
     linkDiv.classList.add("button")
-    linkDiv.style.height = "25px"
-    linkDiv.style.width = "25px"
     linkDiv.style.textAlign = "center"
-    linkDiv.style.padding = "0px"
     linkDiv.style.fontWeight = "normal"
     linkDiv.style.fontSize = "16px"
+    linkDiv.style.borderRadius = "100%"
     linkDiv.setAttribute("href", freestyleLink)
     linkDiv.setAttribute("target", "_blank")
     linkDiv.innerHTML = "i"
+    linkParentDiv.appendChild(linkDiv)
 
-    let mainInfoDiv = document.createElement("span")
-    mainInfoDiv.style.display = "block"
+    let mainInfoDiv = document.createElement("div")
+    mainInfoDiv.style.display = "flex"
+    mainInfoDiv.style.gap = "0.5rem"
+    mainInfoDiv.style.alignItems = "center"
     mainInfoDiv.style.fontSize = "20px"
-    mainInfoDiv.style.fontWeight = "bold"
-    mainInfoDiv.innerHTML = familyName + " | " + phoneNumber + " | " + linkDiv.outerHTML
+    mainInfoDiv.style.padding = "0.5rem"
+    mainInfoDiv.innerHTML = "<span>" + familyName + "</span>" + "<span style='border-right:1px solid black; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + "<span style='font-size: 14px;'>" + phoneNumber + "</span>" + "<span style='border-right:1px solid black; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + linkParentDiv.outerHTML
     col2.appendChild(mainInfoDiv)
     col2.style.width = "fit-content"
+    col2.style.marginRight = "3rem"
     
     let childrenUL = document.createElement("ul")
-    childrenUL.style.paddingLeft = "16px"
-    childrenUL.style.marginBlock = "2px"
+    childrenUL.style.listStyle = "none"
+    childrenUL.style.padding = "0.5rem 1rem"
+    childrenUL.style.marginTop = "0px"
+    childrenUL.style.marginBottom = "0.5rem"
+    childrenUL.style.borderRadius = "5px"
+    childrenUL.style.backgroundColor = "#ccc"
     let childrenListSplit = childrenList.split(":::")
     childrenListSplit.map((child, i) => {
 
@@ -212,7 +228,10 @@ function renderNote(data){
         let classSplit = child.split("<CLASS>")
         let cName = classSplit[0]
 
-        childLI.innerHTML = cName
+        childLI.innerHTML = "<span>" + cName + "</span>"
+        childLI.style.display = "flex"
+        childLI.style.minWidth = "25ch"
+        childLI.style.justifyContent = "space-between"
 
         if (classSplit.length > 1){
             let classInfo = classSplit[1].split("/")
@@ -221,7 +240,7 @@ function renderNote(data){
             let classDay = classInfo[2]
             let classTime = classInfo[3]
 
-            childLI.innerHTML += "  -  " + classLevel + " | " + classDay + " | " + classTime
+            childLI.innerHTML += "<span style='font-size:13px; align-self:end; margin-left:1rem;'>" + classLevel + " " + classDay + " " + classTime + "</span>"
 
         }
 
@@ -241,13 +260,21 @@ function renderNote(data){
 function renderNotesBox(data){
 
     let notesParent = document.createElement("div")
+    notesParent.classList.add("notesbox")
     notesParent.style.height = "100%"
-    notesParent.style.width = "60ch"
-    notesParent.style.placeContent = "center"
+    notesParent.style.minWidth = "80ch"
+    notesParent.style.display = "flex"
+    notesParent.style.gap = "1rem"
+    notesParent.style.justifyContent = "space-between"
     if(data.notes === ""){
         let textBox = document.createElement("textarea")
-        textBox.style.width = "100%"
-        textBox.style.height = "100%"
+        textBox.style.flexBasis = "100%"
+        textBox.style.marginBlock = "0.5rem"
+        textBox.style.borderRadius = "5px"
+        textBox.style.padding = "0.5rem"
+        textBox.style.backgroundColor = "#eee"
+        textBox.style.fontFamily = "system-ui"
+        textBox.style.fontSize = "16px"
         let submitButton = document.createElement("button")
         submitButton.innerHTML = "Add Note"
         submitButton.onclick = () => {
@@ -260,11 +287,23 @@ function renderNotesBox(data){
     }
 
     let notesDiv = document.createElement("p")
+    notesDiv.style.backgroundColor = "#ccc"
+    notesDiv.style.flexBasis = "100%"
+    notesDiv.style.padding = "0.5rem"
+    notesDiv.style.marginBlock = "0.5rem"
+    notesDiv.style.borderRadius = "5px"
     notesDiv.innerHTML = data.notes
     let editButton = document.createElement("button")
     editButton.innerHTML = "Edit"
     editButton.onclick = () => {
         let filledTextBox = document.createElement("textarea")
+        filledTextBox.style.flexBasis = "100%"
+        filledTextBox.style.marginBlock = "0.5rem"
+        filledTextBox.style.borderRadius = "5px"
+        filledTextBox.style.padding = "0.5rem"
+        filledTextBox.style.backgroundColor = "#eee"
+        filledTextBox.style.fontFamily = "system-ui"
+        filledTextBox.style.fontSize = "16px"
         filledTextBox.innerHTML = data.notes
         let submitEditButton = document.createElement("button")
         submitEditButton.innerHTML = "Add Note"
@@ -272,7 +311,6 @@ function renderNotesBox(data){
             console.log(filledTextBox.value)
             data.notes = filledTextBox.value
             updateNote(data)
-            getAllNotes()
         }
         notesDiv.remove()
         editButton.remove()

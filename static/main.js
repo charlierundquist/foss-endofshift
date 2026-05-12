@@ -154,7 +154,7 @@ function renderNote(data){
     newNoteDiv.setAttribute("notes", data.notes)
     newNoteDiv.style.display = "flex"
     newNoteDiv.style.marginTop = "1rem"
-    newNoteDiv.style.backgroundColor = "#bbb"
+    newNoteDiv.style.background = "linear-gradient(90deg, #1eb0ff, #0080c7)"
     newNoteDiv.style.borderRadius = "5px"
 
     let col1 = document.createElement("div")
@@ -179,16 +179,19 @@ function renderNote(data){
     deleteButton.style.border = "none"
     deleteButton.style.cursor = "pointer"
     deleteButton.style.fontSize = "1rem"
+    deleteButton.style.color = "white"
     deleteButton.onclick = () => {
         deleteNote(data)
     }
     col1.appendChild(deleteButton)
     
     let linkParentDiv = document.createElement("div")
+    linkParentDiv.classList.add("freestyleLink")
     linkParentDiv.style.display = "inline-block"
     linkParentDiv.style.width = "20px"
     linkParentDiv.style.height = "20px"
     linkParentDiv.style.borderRadius = "100%"
+    linkParentDiv.style.backgroundColor = "#f8f9fc"
     let linkDiv = document.createElement("a")
     linkDiv.classList.add("button")
     linkDiv.style.textAlign = "center"
@@ -201,12 +204,15 @@ function renderNote(data){
     linkParentDiv.appendChild(linkDiv)
 
     let mainInfoDiv = document.createElement("div")
+    mainInfoDiv.classList.add("mainInfoDiv")
     mainInfoDiv.style.display = "flex"
     mainInfoDiv.style.gap = "0.5rem"
     mainInfoDiv.style.alignItems = "center"
     mainInfoDiv.style.fontSize = "20px"
     mainInfoDiv.style.padding = "0.5rem"
-    mainInfoDiv.innerHTML = "<span>" + familyName + "</span>" + "<span style='border-right:1px solid black; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + "<span style='font-size: 14px;'>" + phoneNumber + "</span>" + "<span style='border-right:1px solid black; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + linkParentDiv.outerHTML
+    mainInfoDiv.style.color = "white"
+    mainInfoDiv.style.fontWeight = "bold"
+    mainInfoDiv.innerHTML = "<span>" + familyName + "</span>" + "<span style='border-right:1px solid white; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + "<span style='font-size: 14px;'>" + phoneNumber + "</span>" + "<span style='border-right:1px solid white; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + linkParentDiv.outerHTML
     col2.appendChild(mainInfoDiv)
     col2.style.width = "fit-content"
     col2.style.marginRight = "3rem"
@@ -217,7 +223,7 @@ function renderNote(data){
     childrenUL.style.marginTop = "0px"
     childrenUL.style.marginBottom = "0.5rem"
     childrenUL.style.borderRadius = "5px"
-    childrenUL.style.backgroundColor = "#ccc"
+    childrenUL.style.backgroundColor = "#f8f9fc"
     let childrenListSplit = childrenList.split(":::")
     childrenListSplit.map((child, i) => {
 
@@ -272,8 +278,8 @@ function renderNotesBox(data){
         textBox.style.marginBlock = "0.5rem"
         textBox.style.borderRadius = "5px"
         textBox.style.padding = "0.5rem"
-        textBox.style.backgroundColor = "#eee"
-        textBox.style.fontFamily = "system-ui"
+        textBox.style.backgroundColor = "#f8f9fc"
+        textBox.style.fontFamily = "Open Sans"
         textBox.style.fontSize = "16px"
         let submitButton = document.createElement("button")
         submitButton.innerHTML = "Add Note"
@@ -287,7 +293,7 @@ function renderNotesBox(data){
     }
 
     let notesDiv = document.createElement("p")
-    notesDiv.style.backgroundColor = "#ccc"
+    notesDiv.style.backgroundColor = "#f8f9fc"
     notesDiv.style.flexBasis = "100%"
     notesDiv.style.padding = "0.5rem"
     notesDiv.style.marginBlock = "0.5rem"
@@ -301,7 +307,7 @@ function renderNotesBox(data){
         filledTextBox.style.marginBlock = "0.5rem"
         filledTextBox.style.borderRadius = "5px"
         filledTextBox.style.padding = "0.5rem"
-        filledTextBox.style.backgroundColor = "#eee"
+        filledTextBox.style.backgroundColor = "#f8f9fc"
         filledTextBox.style.fontFamily = "system-ui"
         filledTextBox.style.fontSize = "16px"
         filledTextBox.innerHTML = data.notes
@@ -312,6 +318,11 @@ function renderNotesBox(data){
             data.notes = filledTextBox.value
             updateNote(data)
         }
+        filledTextBox.addEventListener('keydown', (e) => {
+            if(e.ctrlKey && e.key == "Enter"){
+                submitEditButton.click()
+            }
+        })
         notesDiv.remove()
         editButton.remove()
         notesParent.appendChild(filledTextBox)

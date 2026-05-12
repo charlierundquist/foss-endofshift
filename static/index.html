@@ -10,7 +10,7 @@
     </script>
     <style>
         body{
-            font-family: system-ui;
+            font-family: "Open Sans";
         }
 
         a.button {
@@ -30,6 +30,20 @@
             flex-basis: 3rem;
             align-self: center;
         }
+
+        @media print {
+            button{
+                display:none;
+            }
+
+            .mainInfoDiv{
+                color: black !important;
+            }
+
+            .freestyleLink{
+                display:none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -37,5 +51,6 @@
     <button onclick="clearAllNotes()" style="background-color: #bbb; border: none; border-radius: 5px; cursor: pointer; margin-block: 1rem; padding-block: 0.25rem; width: 5rem;">Clear All</button>
     <div id="getAllNotesResult"></div>
     <button onclick="addNoteFromClipboard()" style="background-color: #bbb; border: none; border-radius: 5px; cursor: pointer; margin-block: 1rem; padding-block: 0.25rem; width: 5rem;"><i style="background-image: url('./icons/plus-solid-full.svg'); width: 25px; height: 25px; display: block; position: relative; left: 50%; translate: -50% 0"></i></button>
+    <button onclick="print()" style="background-color: #bbb; border: none; border-radius: 5px; cursor: pointer; margin-block: 1rem; padding-block: 0.25rem; width: 5rem;"><i style="background-image: url('./icons/plus-solid-full.svg'); width: 25px; height: 25px; display: block; position: relative; left: 50%; translate: -50% 0"></button>
 </body>
 </html>

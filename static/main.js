@@ -191,13 +191,14 @@ function renderNote(data){
     linkParentDiv.style.width = "20px"
     linkParentDiv.style.height = "20px"
     linkParentDiv.style.borderRadius = "100%"
-    linkParentDiv.style.backgroundColor = "#f8f9fc"
     let linkDiv = document.createElement("a")
     linkDiv.classList.add("button")
     linkDiv.style.textAlign = "center"
     linkDiv.style.fontWeight = "normal"
     linkDiv.style.fontSize = "16px"
     linkDiv.style.borderRadius = "100%"
+    linkDiv.style.backgroundColor = "white"
+    linkDiv.style.border = "none"
     linkDiv.setAttribute("href", freestyleLink)
     linkDiv.setAttribute("target", "_blank")
     linkDiv.innerHTML = "i"
@@ -214,7 +215,7 @@ function renderNote(data){
     mainInfoDiv.style.fontWeight = "bold"
     mainInfoDiv.innerHTML = "<span>" + familyName + "</span>" + "<span style='border-right:1px solid white; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + "<span style='font-size: 14px;'>" + phoneNumber + "</span>" + "<span style='border-right:1px solid white; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + linkParentDiv.outerHTML
     col2.appendChild(mainInfoDiv)
-    col2.style.width = "fit-content"
+    col2.style.minWidth = "20rem"
     col2.style.marginRight = "3rem"
     
     let childrenUL = document.createElement("ul")
@@ -287,6 +288,11 @@ function renderNotesBox(data){
             data.notes = textBox.value
             updateNote(data)
         }
+        textBox.addEventListener('keydown', (e) => {
+            if(e.ctrlKey && e.key == "Enter"){
+                submitButton.click()
+            }
+        })
         notesParent.appendChild(textBox)
         notesParent.appendChild(submitButton)
         return notesParent

@@ -11,6 +11,7 @@
     <style>
         body{
             font-family: "Open Sans";
+            text-align: center;
         }
 
         a.button {
@@ -25,9 +26,13 @@
             display:block;
         }
 
+        .notesbox textarea,
+        .notesbox p {
+            text-align: left;
+        }
+
         .notesbox button {
             height:fit-content;
-            flex-basis: 3rem;
             align-self: center;
         }
 
@@ -50,7 +55,7 @@
     <h1>End of Shift Form</h1>
     <button onclick="if(window.confirm('Clear all notes?')) clearAllNotes()" style="cursor: pointer; border: none; background-color: transparent; text-decoration: underline;">Clear All</button>
     <button onclick="print()" style="cursor: pointer; border: none; background-color: transparent; text-decoration: underline;">Print</button>
-    <div id="getAllNotesResult"></div>
+    <div id="getAllNotesResult" style="width:fit-content; margin-inline: auto;"></div>
     <button onclick="addNoteFromClipboard()" style="background-color: #bbb; border: none; border-radius: 5px; cursor: pointer; margin-block: 1rem; padding-block: 0.25rem; width: 10rem; margin-inline: auto; display: block;"><i style="background-image: url('./icons/plus-solid-full.svg'); width: 25px; height: 25px; display: block; position: relative; left: 50%; translate: -50% 0"></i></button>
 </body>
 </html>

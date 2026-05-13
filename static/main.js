@@ -269,9 +269,10 @@ function renderNotesBox(data){
     let notesParent = document.createElement("div")
     notesParent.classList.add("notesbox")
     notesParent.style.height = "100%"
-    notesParent.style.minWidth = "80ch"
+    notesParent.style.minWidth = "60ch"
     notesParent.style.display = "flex"
-    notesParent.style.gap = "1rem"
+    notesParent.style.gap = "0.5rem"
+    notesParent.style.paddingRight = "0.5rem"
     notesParent.style.justifyContent = "space-between"
     if(data.notes === ""){
         let textBox = document.createElement("textarea")
@@ -283,7 +284,14 @@ function renderNotesBox(data){
         textBox.style.fontFamily = "Open Sans"
         textBox.style.fontSize = "16px"
         let submitButton = document.createElement("button")
-        submitButton.innerHTML = "Add Note"
+        submitButton.innerHTML = `<i style="background-image: url('./icons/check-solid-full.svg'); width: 25px; height: 25px; display: block; position: relative; left: 50%; translate: -50% 0"></i>`
+        submitButton.style.border = "none"
+        submitButton.style.backgroundColor = "transparent"
+        submitButton.style.padding = "2px"
+        submitButton.style.borderRadius = "5px"
+        submitButton.style.aspectRatio = "1 / 1"
+        submitButton.style.margin = "0px"
+        submitButton.style.cursor = "pointer"
         submitButton.onclick = () => {
             data.notes = textBox.value
             updateNote(data)
@@ -306,7 +314,14 @@ function renderNotesBox(data){
     notesDiv.style.borderRadius = "5px"
     notesDiv.innerHTML = data.notes
     let editButton = document.createElement("button")
-    editButton.innerHTML = "Edit"
+    editButton.innerHTML = `<i style="background-image: url('./icons/pen-to-square-regular-full.svg'); width: 25px; height: 25px; display: block; position: relative; left: 50%; translate: -50% 0"></i>`
+    editButton.style.border = "none"
+    editButton.style.backgroundColor = "transparent"
+    editButton.style.padding = "2px"
+    editButton.style.borderRadius = "5px"
+    editButton.style.aspectRatio = "1 / 1"
+    editButton.style.margin = "0px"
+    editButton.style.cursor = "pointer"
     editButton.onclick = () => {
         let filledTextBox = document.createElement("textarea")
         filledTextBox.style.flexBasis = "100%"
@@ -318,7 +333,14 @@ function renderNotesBox(data){
         filledTextBox.style.fontSize = "16px"
         filledTextBox.innerHTML = data.notes
         let submitEditButton = document.createElement("button")
-        submitEditButton.innerHTML = "Add Note"
+        submitEditButton.innerHTML = `<i style="background-image: url('./icons/check-solid-full.svg'); width: 25px; height: 25px; display: block; position: relative; left: 50%; translate: -50% 0"></i>`
+        submitEditButton.style.border = "none"
+        submitEditButton.style.backgroundColor = "transparent"
+        submitEditButton.style.padding = "2px"
+        submitEditButton.style.borderRadius = "5px"
+        submitEditButton.style.aspectRatio = "1 / 1"
+        submitEditButton.style.margin = "0px"
+        submitEditButton.style.cursor = "pointer"
         submitEditButton.onclick = () => {
             console.log(filledTextBox.value)
             data.notes = filledTextBox.value

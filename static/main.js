@@ -215,7 +215,7 @@ function renderNote(data){
     mainInfoDiv.style.fontWeight = "bold"
     mainInfoDiv.innerHTML = "<span>" + familyName + "</span>" + "<span style='border-right:1px solid white; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + "<span style='font-size: 14px;'>" + phoneNumber + "</span>" + "<span style='border-right:1px solid white; width: 0px; transform:scaleY(0.75)'>&nbsp;</span>" + linkParentDiv.outerHTML
     col2.appendChild(mainInfoDiv)
-    col2.style.width = "20rem"
+    col2.style.minWidth = "20rem"
     col2.style.marginRight = "3rem"
     
     let childrenUL = document.createElement("ul")
@@ -269,7 +269,7 @@ function renderNotesBox(data){
     let notesParent = document.createElement("div")
     notesParent.classList.add("notesbox")
     notesParent.style.height = "100%"
-    notesParent.style.minWidth = "60ch"
+    notesParent.style.width = "60ch"
     notesParent.style.display = "flex"
     notesParent.style.gap = "0.5rem"
     notesParent.style.paddingRight = "0.5rem"

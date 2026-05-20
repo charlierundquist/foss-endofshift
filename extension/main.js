@@ -130,7 +130,7 @@ function copyInfoToClipboard(element) {
     navigator.clipboard.writeText(clipboardString)
 
     let notebook = document.querySelector(".notebook iframe")
-    notebook.contentWindow.postMessage(clipboardString, "*")
+    notebook.contentWindow.postMessage({action: "addNote", string: clipboardString}, "*")
 
     let notebookContainer = document.querySelector(".notebook")
     let notebookBackground = document.querySelector(".notebook-background")
@@ -193,7 +193,8 @@ function addNotebookButton() {
             background.style.display = "none"
             return
         }
-        iframe.src = iframe.src
+        iframe.contentWindow.postMessage({action: "getAllNotes"}, "*")
+        iframe.contentWindow.postMessage({action: "disablePlus"}, "*")
         container.style.display = "block"
         background.style.display = "block"
     }

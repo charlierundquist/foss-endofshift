@@ -26,9 +26,6 @@ function initFunc() {
             copyButton.className = "c-button c-button--icon"
             copyButton.addEventListener("click", (e) => {
                 copyInfoToClipboard(copyButton)
-                let notebook = document.querySelector(".notebook iframe")
-                console.log(notebook)
-                notebook.contentWindow.postMessage("hello", "*")
             })
             let iconDiv = document.createElement("i")
             iconDiv.className = "icon"
@@ -129,7 +126,12 @@ function getFamilyInfo(url, copyButton){
 }
 
 function copyInfoToClipboard(element) {
-    navigator.clipboard.writeText(element.getAttribute("data-familyinfo"))
+    let clipboardString = element.getAttribute("data-familyinfo")
+    navigator.clipboard.writeText(clipboardString)
+    
+    let notebook = document.querySelector(".notebook iframe")
+    notebook.contentWindow.postMessage(clipboardString, "*")
+
     let iconDiv = element.querySelector("i")
     iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("check-solid-full.svg") + ")"
     setTimeout(() => {
@@ -142,13 +144,18 @@ function addNotebookButton() {
 
     let iframe = document.createElement("iframe")
     iframe.style.width = "100%"
+    iframe.style.height = "100%"
     iframe.setAttribute("src", "https://charlierundquist.github.io/foss-endofshift/static")
 
     let container = document.createElement("div")
     container.classList.add("notebook")
-    container.style.width = "60ch"
+    container.style.width = "800px"
+    container.style.height = "60vh"
     container.style.position = "fixed"
-    container.style.top = "30vh"
+    container.style.zIndex = "500"
+    container.style.top = "50%"
+    container.style.left = "50%"
+    container.style.translate = "-50% -50%"
     container.style.backgroundColor = "white"
     container.style.padding = "1rem"
     container.style.border = "1px solid black"
@@ -157,6 +164,19 @@ function addNotebookButton() {
     container.appendChild(iframe)
     document.body.appendChild(container)
 
+    let background = document.createElement("div")
+    background.style.position = "fixed"
+    background.style.display = "none"
+    background.style.width = "100vw"
+    background.style.height = "100vh"
+    background.style.backgroundColor = "rgba(0, 0, 0, 0.3)"
+    background.style.zIndex = "400"
+    background.onclick = () => {
+        container.style.display = "none"
+        background.style.display = "none"
+    }
+    document.body.appendChild(background)
+
     let button = document.createElement("button")
     button.style.cursor = "pointer"
     button.setAttribute("type", "button")
@@ -164,9 +184,11 @@ function addNotebookButton() {
     button.onclick = () => {
         if(container.style.display === "block"){
             container.style.display = "none"
+            background.style.display = "none"
             return
         }
         container.style.display = "block"
+        background.style.display = "block"
     }
     let iconDiv = document.createElement("i")
     iconDiv.className = "icon"

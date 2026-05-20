@@ -269,7 +269,7 @@ function renderNotesBox(data){
     let notesParent = document.createElement("div")
     notesParent.classList.add("notesbox")
     notesParent.style.height = "100%"
-    notesParent.style.width = "60ch"
+    notesParent.style.width = "40ch"
     notesParent.style.display = "flex"
     notesParent.style.gap = "0.5rem"
     notesParent.style.paddingRight = "0.5rem"

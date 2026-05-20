@@ -162,7 +162,7 @@ function addNotebookButton() {
     container.style.left = "50%"
     container.style.translate = "-50% -50%"
     container.style.backgroundColor = "white"
-    container.style.padding = "1rem"
+    container.style.padding = "3rem"
     container.style.border = "1px solid black"
     container.style.borderRadius = "5px"
     container.style.display = "none"

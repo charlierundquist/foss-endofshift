@@ -194,7 +194,6 @@ function addNotebookButton() {
             return
         }
         iframe.contentWindow.postMessage({action: "getAllNotes"}, "*")
-        iframe.contentWindow.postMessage({action: "disablePlus"}, "*")
         container.style.display = "block"
         background.style.display = "block"
     }

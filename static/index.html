@@ -8,12 +8,10 @@
     <script>
         openDB()
         window.addEventListener("message", (e) => {
+            document.getElementById("addNoteFromClipboardButton").style.display = "none"
             switch (e.data.action){
                 case "getAllNotes":
                     getAllNotes()
-                    break
-                case "disablePlus":
-                    document.getElementById("addNoteFromClipboardButton").style.display = "none"
                     break
                 case "addNote":
                     addNote(e.data.string, "")

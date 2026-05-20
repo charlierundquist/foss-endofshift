@@ -10,7 +10,7 @@
     {
       "js": ["main.js"],
       "matches": [
-        "https://freestyle.fossswimschool.com/families/*"
+        "https://freestyle.fossswimschool.com/*"
       ]
     }
   ],

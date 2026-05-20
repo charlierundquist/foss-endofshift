@@ -83,7 +83,7 @@ function getFamilyInfo(url, copyButton){
                         return
                     }
                     const statusColContent = statusColDiv.querySelector("span").innerHTML
-                    if(!statusColContent.includes("Enrolled") && !statusColContent.includes("Stay") && !statusColContent.includes("Advance")){
+                    if(!statusColContent.includes("Enrolled") && !statusColContent.includes("Stay") && !statusColContent.includes("Advance") && !statusColContent.includes("Reassign")){
                         console.log("returning")
                         return
                     }

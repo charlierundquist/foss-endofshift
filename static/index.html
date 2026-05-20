@@ -11,10 +11,13 @@
             switch (e.data.action){
                 case "getAllNotes":
                     getAllNotes()
+                    break
                 case "disablePlus":
                     document.getElementById("addNoteFromClipboardButton").style.display = "none"
+                    break
                 case "addNote":
                     addNote(e.data.string, "")
+                    break
             }
         })
     </script>

@@ -16,6 +16,6 @@
   ],
   "web_accessible_resources": [{
     "matches": ["<all_urls>"],
-    "resources": ["plus-solid-full.svg", "check-solid-full.svg", "spinner-solid-full.svg"]
+    "resources": ["plus-solid-full.svg", "check-solid-full.svg", "spinner-solid-full.svg", "print-solid-full.svg"]
     }]
 }

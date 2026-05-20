@@ -37,8 +37,10 @@ function initFunc() {
 
             let buttonsRow = document.querySelector(".fi-buttons-row")
             buttonsRow.appendChild(copyButton)
-
+            
             getFamilyInfo(url, copyButton);
+            
+            addNotebookButton();
         }
     });
     const config = {subtree: true, childList: true};
@@ -130,4 +132,43 @@ function copyInfoToClipboard(element) {
     setTimeout(() => {
         iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("plus-solid-full.svg") + ")"
     }, 2000);
+}
+
+function addNotebookButton() {
+    if(document.querySelector(".notebook-button") != null) return
+
+    let iframe = document.createElement("iframe")
+    iframe.setAttribute("src", "https://charlierundquist.github.io/foss-endofshift/static")
+
+    let container = document.createElement("div")
+    container.classList.add("notebook")
+    container.style.width = "60ch"
+    container.style.position = "fixed"
+    container.style.top = "30vh"
+    container.appendChild(iframe)
+    document.body.appendChild(container)
+
+    let button = document.createElement("button")
+    button.style.cursor = "pointer"
+    button.setAttribute("type", "button")
+    button.className = "c-button c-button--icon notebook-button"
+    button.onclick = () => {
+        let notebookContainer = document.querySelector(".notebook")
+        if(notebookContainer.style.display === "block"){
+            notebookContainer.style.display === "none"
+            return
+        }
+        notebookContainer.style.display === "block"
+    }
+    let iconDiv = document.createElement("i")
+    iconDiv.className = "icon"
+    iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("print-solid-full.svg") + ")"
+    iconDiv.style.height = "20px"
+    iconDiv.style.width = "20px"
+    button.appendChild(iconDiv)
+
+    let buttonRow = document.querySelector("foss-alerts-icon")
+    buttonRow.style.display = "flex"
+    buttonRow.style.gap = "1rem"
+    buttonRow.prepend(button)
 }

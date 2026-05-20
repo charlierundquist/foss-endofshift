@@ -8,7 +8,7 @@
     <script>
         openDB()
         window.addEventListener("message", (e) => {
-            console.log(e.data)
+            addNote(e.data, "")
         })
     </script>
     <style>

@@ -28,7 +28,7 @@ function initFunc() {
                 copyInfoToClipboard(copyButton)
                 let notebook = document.querySelector(".notebook iframe")
                 console.log(notebook)
-                notebook.contentWindow.postMessage("hello")
+                notebook.contentWindow.postMessage("hello", "*")
             })
             let iconDiv = document.createElement("i")
             iconDiv.className = "icon"

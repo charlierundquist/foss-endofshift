@@ -156,6 +156,7 @@ function renderNote(data){
     newNoteDiv.style.marginTop = "1rem"
     newNoteDiv.style.background = "linear-gradient(90deg, #1eb0ff, #0080c7)"
     newNoteDiv.style.borderRadius = "5px"
+    newNoteDiv.style.textAlign = "left"
 
     let col1 = document.createElement("div")
     let col2 = document.createElement("div")
@@ -225,6 +226,9 @@ function renderNote(data){
     childrenUL.style.marginBottom = "0.5rem"
     childrenUL.style.borderRadius = "5px"
     childrenUL.style.backgroundColor = "#f8f9fc"
+    childrenUL.style.display = "flex"
+    childrenUL.style.flexDirection = "column"
+    childrenUL.style.gap = "5px"
     let childrenListSplit = childrenList.split(":::")
     childrenListSplit.map((child, i) => {
 

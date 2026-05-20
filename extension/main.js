@@ -128,9 +128,14 @@ function getFamilyInfo(url, copyButton){
 function copyInfoToClipboard(element) {
     let clipboardString = element.getAttribute("data-familyinfo")
     navigator.clipboard.writeText(clipboardString)
-    
+
     let notebook = document.querySelector(".notebook iframe")
     notebook.contentWindow.postMessage(clipboardString, "*")
+
+    let notebookContainer = document.querySelector(".notebook")
+    let notebookBackground = document.querySelector(".notebook-background")
+    notebookContainer.style.display = "block"
+    notebookBackground.style.display = "block"
 
     let iconDiv = element.querySelector("i")
     iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("check-solid-full.svg") + ")"
@@ -149,8 +154,8 @@ function addNotebookButton() {
 
     let container = document.createElement("div")
     container.classList.add("notebook")
-    container.style.width = "800px"
-    container.style.height = "60vh"
+    container.style.width = "850px"
+    container.style.height = "75vh"
     container.style.position = "fixed"
     container.style.zIndex = "500"
     container.style.top = "50%"
@@ -165,6 +170,7 @@ function addNotebookButton() {
     document.body.appendChild(container)
 
     let background = document.createElement("div")
+    background.classList.add("notebook-background")
     background.style.position = "fixed"
     background.style.display = "none"
     background.style.width = "100vw"
@@ -187,12 +193,13 @@ function addNotebookButton() {
             background.style.display = "none"
             return
         }
+        iframe.src = iframe.src
         container.style.display = "block"
         background.style.display = "block"
     }
     let iconDiv = document.createElement("i")
     iconDiv.className = "icon"
-    iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("print-solid-full.svg") + ")"
+    iconDiv.style.backgroundImage = "url(" + chrome.runtime.getURL("pen-to-square-regular-full.svg") + ")"
     iconDiv.style.height = "20px"
     iconDiv.style.width = "20px"
     button.appendChild(iconDiv)

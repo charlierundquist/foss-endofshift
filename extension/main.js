@@ -26,6 +26,8 @@ function initFunc() {
             copyButton.className = "c-button c-button--icon"
             copyButton.addEventListener("click", (e) => {
                 copyInfoToClipboard(copyButton)
+                let notebook = document.querySelector(".notebook iframe")
+                notebook.contentWindow.postMessage("hello")
             })
             let iconDiv = document.createElement("i")
             iconDiv.className = "icon"
@@ -138,6 +140,7 @@ function addNotebookButton() {
     if(document.querySelector(".notebook-button") != null) return
 
     let iframe = document.createElement("iframe")
+    iframe.style.width = "100%"
     iframe.setAttribute("src", "https://charlierundquist.github.io/foss-endofshift/static")
 
     let container = document.createElement("div")
@@ -145,6 +148,11 @@ function addNotebookButton() {
     container.style.width = "60ch"
     container.style.position = "fixed"
     container.style.top = "30vh"
+    container.style.backgroundColor = "white"
+    container.style.padding = "1rem"
+    container.style.border = "1px solid black"
+    container.style.borderRadius = "5px"
+    container.style.display = "none"
     container.appendChild(iframe)
     document.body.appendChild(container)
 
@@ -153,12 +161,11 @@ function addNotebookButton() {
     button.setAttribute("type", "button")
     button.className = "c-button c-button--icon notebook-button"
     button.onclick = () => {
-        let notebookContainer = document.querySelector(".notebook")
-        if(notebookContainer.style.display === "block"){
-            notebookContainer.style.display === "none"
+        if(container.style.display === "block"){
+            container.style.display = "none"
             return
         }
-        notebookContainer.style.display === "block"
+        container.style.display = "block"
     }
     let iconDiv = document.createElement("i")
     iconDiv.className = "icon"

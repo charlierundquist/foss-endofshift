@@ -4,6 +4,10 @@ const DB_STORE_NAME = "endofshiftnotes"
 
 var db
 
+window.addEventListener("message", (e) => {
+    console.log(e.data)
+})
+
 function openDB() {
     console.log("openDb ...");
     var req = indexedDB.open(DB_NAME, DB_VERSION);

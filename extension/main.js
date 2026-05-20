@@ -27,6 +27,7 @@ function initFunc() {
             copyButton.addEventListener("click", (e) => {
                 copyInfoToClipboard(copyButton)
                 let notebook = document.querySelector(".notebook iframe")
+                console.log(notebook)
                 notebook.contentWindow.postMessage("hello")
             })
             let iconDiv = document.createElement("i")

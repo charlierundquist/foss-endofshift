@@ -181,10 +181,6 @@ function addNotebookButton() {
     }
     document.body.appendChild(background)
 
-    let xButton = document.createElement("span")
-    xButton.classList.add("c-close-button")
-    xButton.innerHTML = "x"
-
     let button = document.createElement("button")
     button.style.cursor = "pointer"
     button.setAttribute("type", "button")

@@ -154,7 +154,7 @@ function addNotebookButton() {
 
     let container = document.createElement("div")
     container.classList.add("notebook")
-    container.style.width = "850px"
+    container.style.width = "870px"
     container.style.height = "75vh"
     container.style.position = "fixed"
     container.style.zIndex = "500"
@@ -163,8 +163,6 @@ function addNotebookButton() {
     container.style.translate = "-50% -50%"
     container.style.backgroundColor = "white"
     container.style.padding = "3rem"
-    container.style.border = "1px solid black"
-    container.style.borderRadius = "5px"
     container.style.display = "none"
     container.appendChild(iframe)
     document.body.appendChild(container)
@@ -182,6 +180,10 @@ function addNotebookButton() {
         background.style.display = "none"
     }
     document.body.appendChild(background)
+
+    let xButton = document.createElement("span")
+    xButton.classList.add("c-close-button")
+    xButton.innerHTML = "x"
 
     let button = document.createElement("button")
     button.style.cursor = "pointer"

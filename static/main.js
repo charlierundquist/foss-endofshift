@@ -259,6 +259,8 @@ function renderNote(data){
     })
     col2.appendChild(childrenUL)
 
+    col3.style.flexBasis = "100%"
+    col3.style.flexShrink = "1"
     col3.appendChild(renderNotesBox(data))
 
     newNoteDiv.appendChild(col1)
@@ -273,7 +275,6 @@ function renderNotesBox(data){
     let notesParent = document.createElement("div")
     notesParent.classList.add("notesbox")
     notesParent.style.height = "100%"
-    notesParent.style.width = "40ch"
     notesParent.style.display = "flex"
     notesParent.style.gap = "0.5rem"
     notesParent.style.paddingRight = "0.5rem"

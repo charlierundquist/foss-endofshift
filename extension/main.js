@@ -127,7 +127,7 @@ function getFamilyInfo(url, copyButton){
 
 function copyInfoToClipboard(element) {
     let clipboardString = element.getAttribute("data-familyinfo")
-    navigator.clipboard.writeText(clipboardString)
+    // navigator.clipboard.writeText(clipboardString)
 
     let notebook = document.querySelector(".notebook iframe")
     notebook.contentWindow.postMessage({action: "addNote", string: clipboardString}, "*")

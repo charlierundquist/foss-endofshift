@@ -334,7 +334,7 @@ function renderNotesBox(data){
         filledTextBox.style.borderRadius = "5px"
         filledTextBox.style.padding = "0.5rem"
         filledTextBox.style.backgroundColor = "#f8f9fc"
-        filledTextBox.style.fontFamily = "system-ui"
+        filledTextBox.style.fontFamily = "Open Sans"
         filledTextBox.style.fontSize = "16px"
         filledTextBox.innerHTML = data.notes
         let submitEditButton = document.createElement("button")

@@ -41,6 +41,7 @@ function initFunc() {
             getFamilyInfo(url, copyButton);
             
             addNotebookButton();
+            addFamSwimButton();
         }
     });
     const config = {subtree: true, childList: true};
@@ -206,4 +207,37 @@ function addNotebookButton() {
     buttonRow.style.display = "flex"
     buttonRow.style.gap = "1rem"
     buttonRow.prepend(button)
+}
+
+function addFamSwimButton(){
+
+    // get data
+    const parentName = document.querySelector(".u-details__name").getAttribute("title")
+    const phoneNumber = "(" + document.querySelector(".fi-info > div:nth-child(2) > div:nth-child(2)").innerHTML.split("(")[1];
+    const emailAddress = document.querySelector(".fi-info > div:nth-child(3) > div:nth-child(2)").getAttribute("title");
+    
+    // add to dom
+    let buttonRow = document.querySelector(".fi-parent .fi-buttons-row")
+    let addToFamSwimButton = document.createElement("button")
+    addToFamSwimButton.className = "c-button c-button--icon"
+    addToFamSwimButton.setAttribute("parentName", parentName)
+    addToFamSwimButton.setAttribute("phoneNumber", phoneNumber)
+    addToFamSwimButton.setAttribute("emailAddress", emailAddress)
+    addToFamSwimButton.onclick = () => {
+        famSwimIFrame.style.display = "block"
+    }
+    buttonRow.appendChild(addToFamSwimButton)
+
+    let famSwimIFrame = document.createElement("iframe")
+    famSwimIFrame.setAttribute("src", "http://localhost:8080/familyswim")
+    famSwimIFrame.style.width = "60ch"
+    famSwimIFrame.style.height = "80vh"
+    famSwimIFrame.style.position = "fixed"
+    famSwimIFrame.style.backgroundColor = "white"
+    famSwimIFrame.style.zIndex = "400"
+    famSwimIFrame.style.top = "10vh"
+    famSwimIFrame.style.left = "50%"
+    famSwimIFrame.style.translate = "-50% 0"
+    famSwimIFrame.style.display = "none"
+    document.body.appendChild(famSwimIFrame)
 }

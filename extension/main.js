@@ -41,7 +41,7 @@ function initFunc() {
             getFamilyInfo(url, copyButton);
             
             addNotebookButton();
-            // addFamSwimButton();
+            addFamSwimButton();
         }
     });
     const config = {subtree: true, childList: true};
@@ -217,17 +217,6 @@ function addFamSwimButton(){
     const emailAddress = document.querySelector(".fi-info > div:nth-child(3) > div:nth-child(2)").getAttribute("title");
     
     // add to dom
-    let buttonRow = document.querySelector(".fi-parent .fi-buttons-row")
-    let addToFamSwimButton = document.createElement("button")
-    addToFamSwimButton.className = "c-button c-button--icon"
-    addToFamSwimButton.setAttribute("parentName", parentName)
-    addToFamSwimButton.setAttribute("phoneNumber", phoneNumber)
-    addToFamSwimButton.setAttribute("emailAddress", emailAddress)
-    addToFamSwimButton.onclick = () => {
-        famSwimIFrame.style.display = "block"
-    }
-    buttonRow.appendChild(addToFamSwimButton)
-
     let famSwimIFrame = document.createElement("iframe")
     famSwimIFrame.setAttribute("src", "http://localhost:8080/familyswim")
     famSwimIFrame.style.width = "60ch"
@@ -240,4 +229,17 @@ function addFamSwimButton(){
     famSwimIFrame.style.translate = "-50% 0"
     famSwimIFrame.style.display = "none"
     document.body.appendChild(famSwimIFrame)
+
+    let buttonRow = document.querySelector(".fi-parent .fi-buttons-row")
+    let addToFamSwimButton = document.createElement("button")
+    addToFamSwimButton.className = "c-button c-button--icon"
+    addToFamSwimButton.setAttribute("parentName", parentName)
+    addToFamSwimButton.setAttribute("phoneNumber", phoneNumber)
+    addToFamSwimButton.setAttribute("emailAddress", emailAddress)
+    addToFamSwimButton.onclick = () => {
+        famSwimIFrame.style.display = "block"
+        famSwimIFrame.contentWindow.postMessage({parentName: parentName, phoneNumber: phoneNumber, emailAddress: emailAddress}, "*")
+    }
+    buttonRow.appendChild(addToFamSwimButton)
+
 }

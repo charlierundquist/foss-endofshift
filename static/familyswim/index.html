@@ -6,6 +6,9 @@
     <script src="main.js"></script>
     <script>
         openDB();
+        window.addEventListener("message", (e)=>{
+            prepareEntry(e.data);
+        })
     </script>
     <title>FOSS Family Swim - APV</title>
 </head>
@@ -18,5 +21,6 @@
     <div>pull up date -> list of signed up names</div>
     <div>edit numbers or remove from list</div>
     <div>export to clipboard for spreadsheet</div>
+    <div id="prepareEntry"></div>
 </body>
 </html>

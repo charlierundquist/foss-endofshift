@@ -144,3 +144,22 @@ function getAllEntries(){
         console.log("error")
     }
 }
+
+function prepareEntry(data){
+    let resultContainer = document.getElementById("prepareEntry")
+
+    const dates = ["June 6th", "June 13th"]
+
+    dates.map(date => {
+        let newDatePicker = document.createElement("button")
+        newDatePicker.innerHTML = date
+        newDatePicker.onclick = () => {
+            resultContainer.dispatchEvent(new CustomEvent("datechosen", {detail: {date:date}}))
+        }
+        resultContainer.appendChild(newDatePicker)
+    })
+
+    resultContainer.addEventListener("datechosen", (e) => {
+        console.log(e.detail.date)
+    })
+}

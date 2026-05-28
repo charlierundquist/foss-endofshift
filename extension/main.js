@@ -41,7 +41,7 @@ function initFunc() {
             getFamilyInfo(url, copyButton);
             
             addNotebookButton();
-            addFamSwimButton();
+            // addFamSwimButton();
         }
     });
     const config = {subtree: true, childList: true};

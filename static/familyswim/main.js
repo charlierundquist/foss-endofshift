@@ -134,7 +134,7 @@ function getAllEntries(){
         const cursor = event.target.result
         if(cursor){
 
-            // update dom
+            console.log(cursor.value)
             
             cursor.continue()
         }
@@ -148,18 +148,105 @@ function getAllEntries(){
 function prepareEntry(data){
     let resultContainer = document.getElementById("prepareEntry")
 
+    const parentName = data.parentName
+    const phoneNumber = data.phoneNumber
+    const emailAddress = data.emailAddress
+    let date = ""
+    let attendenceNumber = ""
+
     const dates = ["June 6th", "June 13th"]
 
     dates.map(date => {
         let newDatePicker = document.createElement("button")
         newDatePicker.innerHTML = date
         newDatePicker.onclick = () => {
-            resultContainer.dispatchEvent(new CustomEvent("datechosen", {detail: {date:date}}))
+            resultContainer.dispatchEvent(new CustomEvent("datechosen", {detail: {date:date}}));
+            resultContainer.setAttribute("date", date);
         }
         resultContainer.appendChild(newDatePicker)
     })
 
     resultContainer.addEventListener("datechosen", (e) => {
-        console.log(e.detail.date)
+        date = e.detail.date
+        let me = e.target
+        me.innerHTML = ""
+        
+        let parentCounter = document.createElement("div")
+        parentCounter.style.gridTemplateColumns = "1fr 1fr"
+        parentCounter.style.gridTemplateRows = "1fr 1fr"
+        parentCounter.style.display = "grid"
+
+        let pNumber = document.createElement("div")
+        pNumber.innerHTML = "1"
+        pNumber.style.gridArea = "1 / 1 / 3 / 2"
+        parentCounter.appendChild(pNumber)
+
+        let pUpButton = document.createElement("button")
+        pUpButton.innerHTML = "/\\"
+        pUpButton.style.gridArea = "1 / 2 / 2 / 3"
+        pUpButton.onclick = () => {
+            let currentNumber = parseInt(pNumber.innerHTML)
+            let newNumber = (currentNumber + 1) % 6
+            if(newNumber === 0) newNumber = 1
+            pNumber.innerHTML = newNumber
+        }
+        parentCounter.appendChild(pUpButton)
+
+        let pDownButton = document.createElement("button")
+        pDownButton.innerHTML = "\\/"
+        pDownButton.style.gridArea = "2 / 2 / 3 / 3"
+        pDownButton.onclick = () => {
+            let currentNumber = parseInt(pNumber.innerHTML)
+            let newNumber = (currentNumber - 1) % 6
+            if(newNumber === 0) newNumber = 5
+            pNumber.innerHTML = newNumber
+        }
+        parentCounter.appendChild(pDownButton)
+
+        let childCounter = document.createElement("div")
+        childCounter.style.gridTemplateColumns = "1fr 1fr"
+        childCounter.style.gridTemplateRows = "1fr 1fr"
+        childCounter.style.display = "grid"
+
+        let cNumber = document.createElement("div")
+        cNumber.innerHTML = "1"
+        cNumber.style.gridArea = "1 / 1 / 3 / 2"
+        childCounter.appendChild(cNumber)
+
+        let cUpButton = document.createElement("button")
+        cUpButton.innerHTML = "/\\"
+        cUpButton.style.gridArea = "1 / 2 / 2 / 3"
+        cUpButton.onclick = () => {
+            let currentNumber = parseInt(cNumber.innerHTML)
+            let newNumber = (currentNumber + 1) % 6
+            if(newNumber === 0) newNumber = 1
+            cNumber.innerHTML = newNumber
+        }
+        childCounter.appendChild(cUpButton)
+
+        let cDownButton = document.createElement("button")
+        cDownButton.innerHTML = "\\/"
+        cDownButton.style.gridArea = "2 / 2 / 3 / 3"
+        cDownButton.onclick = () => {
+            let currentNumber = parseInt(cNumber.innerHTML)
+            let newNumber = (currentNumber - 1) % 6
+            if(newNumber === 0) newNumber = 5
+            cNumber.innerHTML = newNumber
+        }
+        childCounter.appendChild(cDownButton)
+
+        let submitButton = document.createElement("button")
+        submitButton.innerHTML = "submit"
+        submitButton.onclick = () => {
+            let parentCount = parseInt(pNumber.innerHTML)
+            let childCount = parseInt(cNumber.innerHTML)
+            attendenceNumber = parentCount + "&" + childCount
+
+            addEntry(date, phoneNumber, emailAddress, parentName, attendenceNumber)
+        }
+
+        me.appendChild(parentCounter)
+        me.appendChild(childCounter)
+        me.appendChild(submitButton)
     })
 }

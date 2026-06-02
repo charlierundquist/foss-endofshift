@@ -215,20 +215,156 @@ function addFamSwimButton(){
     const parentName = document.querySelector(".u-details__name").getAttribute("title")
     const phoneNumber = "(" + document.querySelector(".fi-info > div:nth-child(2) > div:nth-child(2)").innerHTML.split("(")[1];
     const emailAddress = document.querySelector(".fi-info > div:nth-child(3) > div:nth-child(2)").getAttribute("title");
+    const cssInitials = document.querySelector(".header__admin-name").innerHTML.substring(0,2).toUpperCase();
     
     // add to dom
-    let famSwimIFrame = document.createElement("iframe")
-    famSwimIFrame.setAttribute("src", "http://localhost:8080/familyswim")
-    famSwimIFrame.style.width = "60ch"
-    famSwimIFrame.style.height = "80vh"
-    famSwimIFrame.style.position = "fixed"
-    famSwimIFrame.style.backgroundColor = "white"
-    famSwimIFrame.style.zIndex = "400"
-    famSwimIFrame.style.top = "10vh"
-    famSwimIFrame.style.left = "50%"
-    famSwimIFrame.style.translate = "-50% 0"
-    famSwimIFrame.style.display = "none"
-    document.body.appendChild(famSwimIFrame)
+    let popupContainer = document.createElement("div")
+    popupContainer.classList.add("famswimpopup")
+    popupContainer.style.width = "870px"
+    popupContainer.style.height = "75vh"
+    popupContainer.style.position = "fixed"
+    popupContainer.style.zIndex = "500"
+    popupContainer.style.top = "50%"
+    popupContainer.style.left = "50%"
+    popupContainer.style.translate = "-50% -50%"
+    popupContainer.style.backgroundColor = "white"
+    popupContainer.style.padding = "3rem"
+    popupContainer.style.display = "none"
+    document.body.appendChild(popupContainer)
+
+    let countersContainer = document.createElement("div")
+    countersContainer.style.display = "flex"
+    countersContainer.style.justifyContent = "space-around"
+    countersContainer.style.width = "20rem"
+    countersContainer.style.marginInline = "auto"
+
+    let parentCounter = document.createElement("div")
+    parentCounter.style.gridTemplateColumns = "3fr 1fr"
+    parentCounter.style.gridTemplateRows = "1fr 1fr"
+    parentCounter.style.display = "grid"
+    parentCounter.style.width = "5rem"
+
+    let pNumber = document.createElement("div")
+    pNumber.innerHTML = "1"
+    pNumber.style.gridArea = "1 / 1 / 3 / 2"
+    pNumber.style.width = "fit-content"
+    pNumber.style.height = "fit-content"
+    pNumber.style.placeSelf = "center"
+    pNumber.style.fontSize = "30px"
+    parentCounter.appendChild(pNumber)
+
+    let pUpButton = document.createElement("button")
+    pUpButton.style.cursor = "pointer"
+    pUpButton.setAttribute("type", "button")
+    pUpButton.className = "c-button c-button--icon notebook-button"
+    pUpButton.style.gridArea = "1 / 2 / 2 / 3"
+    pUpButton.style.border = "none"
+    pUpButton.style.background = "none"
+    pUpButton.onclick = () => {
+        let currentNumber = parseInt(pNumber.innerHTML)
+        let newNumber = (currentNumber + 1) % 6
+        if(newNumber === 0) newNumber = 1
+        pNumber.innerHTML = newNumber
+    }
+    let pUpIcon = document.createElement("i")
+    pUpIcon.className = "icon"
+    pUpIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("caret-up-solid-full.svg") + ")"
+    pUpIcon.style.height = "20px"
+    pUpIcon.style.width = "20px"
+    pUpButton.appendChild(pUpIcon)
+    parentCounter.appendChild(pUpButton)
+
+    let pDownButton = document.createElement("button")
+    pDownButton.style.cursor = "pointer"
+    pDownButton.setAttribute("type", "button")
+    pDownButton.className = "c-button c-button--icon notebook-button"
+    pDownButton.style.gridArea = "2 / 2 / 3 / 3"
+    pDownButton.style.border = "none"
+    pDownButton.style.background = "none"
+    pDownButton.onclick = () => {
+        let currentNumber = parseInt(pNumber.innerHTML)
+        let newNumber = (currentNumber - 1) % 6
+        if(newNumber === 0) newNumber = 5
+        pNumber.innerHTML = newNumber
+    }
+    let pDownIcon = document.createElement("i")
+    pDownIcon.className = "icon"
+    pDownIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("caret-down-solid-full.svg") + ")"
+    pDownIcon.style.height = "20px"
+    pDownIcon.style.width = "20px"
+    pUpButton.appendChild(pDownIcon)
+    parentCounter.appendChild(pDownButton)
+
+    let childCounter = document.createElement("div")
+    childCounter.style.gridTemplateColumns = "3fr 1fr"
+    childCounter.style.gridTemplateRows = "1fr 1fr"
+    childCounter.style.display = "grid"
+    childCounter.style.width = "5rem"
+
+    let cNumber = document.createElement("div")
+    cNumber.innerHTML = "1"
+    cNumber.style.gridArea = "1 / 1 / 3 / 2"
+    cNumber.style.width = "fit-content"
+    cNumber.style.height = "fit-content"
+    cNumber.style.placeSelf = "center"
+    cNumber.style.fontSize = "30px"
+    childCounter.appendChild(cNumber)
+
+    let cUpButton = document.createElement("button")
+    cUpButton.innerHTML = "/\\"
+    cUpButton.style.gridArea = "1 / 2 / 2 / 3"
+    cUpButton.style.border = "none"
+    cUpButton.style.background = "none"
+    cUpButton.onclick = () => {
+        let currentNumber = parseInt(cNumber.innerHTML)
+        let newNumber = (currentNumber + 1) % 6
+        if(newNumber === 0) newNumber = 1
+        cNumber.innerHTML = newNumber
+    }
+    childCounter.appendChild(cUpButton)
+
+    let cDownButton = document.createElement("button")
+    cDownButton.innerHTML = "\\/"
+    cDownButton.style.gridArea = "2 / 2 / 3 / 3"
+    cDownButton.style.border = "none"
+    cDownButton.style.background = "none"
+    cDownButton.onclick = () => {
+        let currentNumber = parseInt(cNumber.innerHTML)
+        let newNumber = (currentNumber - 1) % 6
+        if(newNumber === 0) newNumber = 5
+        cNumber.innerHTML = newNumber
+    }
+    childCounter.appendChild(cDownButton)
+
+    let submitButton = document.createElement("button")
+    submitButton.innerHTML = "submit"
+    submitButton.onclick = () => {
+        let parentCount = parseInt(pNumber.innerHTML)
+        let childCount = parseInt(cNumber.innerHTML)
+        attendenceNumber = parentCount + "&" + childCount
+
+        addEntry(date, phoneNumber, emailAddress, parentName, attendenceNumber)
+    }
+
+    countersContainer.appendChild(parentCounter)
+    countersContainer.appendChild(childCounter)
+    
+    popupContainer.appendChild(countersContainer)
+    popupContainer.appendChild(submitButton)
+
+    let background = document.createElement("div")
+    background.classList.add("famswim-background")
+    background.style.position = "fixed"
+    background.style.display = "none"
+    background.style.width = "100vw"
+    background.style.height = "100vh"
+    background.style.backgroundColor = "rgba(0, 0, 0, 0.3)"
+    background.style.zIndex = "400"
+    background.onclick = () => {
+        popupContainer.style.display = "none"
+        background.style.display = "none"
+    }
+    document.body.appendChild(background)
 
     let buttonRow = document.querySelector(".fi-parent .fi-buttons-row")
     let addToFamSwimButton = document.createElement("button")
@@ -236,9 +372,10 @@ function addFamSwimButton(){
     addToFamSwimButton.setAttribute("parentName", parentName)
     addToFamSwimButton.setAttribute("phoneNumber", phoneNumber)
     addToFamSwimButton.setAttribute("emailAddress", emailAddress)
+    addToFamSwimButton.setAttribute("cssInitials", cssInitials)
     addToFamSwimButton.onclick = () => {
-        famSwimIFrame.style.display = "block"
-        famSwimIFrame.contentWindow.postMessage({parentName: parentName, phoneNumber: phoneNumber, emailAddress: emailAddress}, "*")
+        popupContainer.style.display = "block"
+        background.style.display = "block"
     }
     buttonRow.appendChild(addToFamSwimButton)
 

@@ -1,5 +1,5 @@
 const DB_NAME = "apv_foss_familyswimentries_indexeddb"
-const DB_VERSION = 2
+const DB_VERSION = 3
 const DB_STORE_NAME = "familyswimentries"
 
 var db
@@ -24,10 +24,6 @@ function openDB() {
         DB_STORE_NAME, { keyPath: 'id', autoIncrement: true });
 
       store.createIndex('date', 'date', { unique: false });
-      store.createIndex('phonenumber', 'phonenumber', { unique: false });
-      store.createIndex('emailaddress', 'emailaddress', { unique: false });
-      store.createIndex('parentname', 'parentname', { unique: false });
-      store.createIndex('attendancenumber', 'attendancenumber', { unique: false });
     };
 }
 
@@ -40,7 +36,7 @@ function clearObjectStore() {
     var store = getObjectStore(DB_STORE_NAME, 'readwrite');
     var req = store.clear();
     req.onsuccess = function(evt) {
-        getAllNotes()
+        getAllEntries()
     };
     req.onerror = function (evt) {
         console.error("clearObjectStore:", evt.target.errorCode);

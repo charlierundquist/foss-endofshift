@@ -260,6 +260,8 @@ function addFamSwimButton(){
     pUpButton.style.gridArea = "1 / 2 / 2 / 3"
     pUpButton.style.border = "none"
     pUpButton.style.background = "none"
+    pUpButton.style.height = "15px"
+    pUpButton.style.padding = "0"
     pUpButton.onclick = () => {
         let currentNumber = parseInt(pNumber.innerHTML)
         let newNumber = (currentNumber + 1) % 6
@@ -281,6 +283,8 @@ function addFamSwimButton(){
     pDownButton.style.gridArea = "2 / 2 / 3 / 3"
     pDownButton.style.border = "none"
     pDownButton.style.background = "none"
+    pDownButton.style.height = "15px"
+    pDownButton.style.padding = "0"
     pDownButton.onclick = () => {
         let currentNumber = parseInt(pNumber.innerHTML)
         let newNumber = (currentNumber - 1) % 6
@@ -292,7 +296,7 @@ function addFamSwimButton(){
     pDownIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("caret-down-solid-full.svg") + ")"
     pDownIcon.style.height = "20px"
     pDownIcon.style.width = "20px"
-    pUpButton.appendChild(pDownIcon)
+    pDownButton.appendChild(pDownIcon)
     parentCounter.appendChild(pDownButton)
 
     let childCounter = document.createElement("div")

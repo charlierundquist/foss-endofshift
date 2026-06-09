@@ -220,8 +220,8 @@ function addFamSwimButton(){
     // add to dom
     let popupContainer = document.createElement("div")
     popupContainer.classList.add("famswimpopup")
-    popupContainer.style.width = "870px"
-    popupContainer.style.height = "75vh"
+    popupContainer.style.width = "60ch"
+    popupContainer.style.height = "60ch"
     popupContainer.style.position = "fixed"
     popupContainer.style.zIndex = "500"
     popupContainer.style.top = "50%"
@@ -235,126 +235,36 @@ function addFamSwimButton(){
     let countersContainer = document.createElement("div")
     countersContainer.style.display = "flex"
     countersContainer.style.justifyContent = "space-around"
-    countersContainer.style.width = "20rem"
+    countersContainer.style.alignItems = "center"
+    countersContainer.style.width = "40rem"
+    countersContainer.style.marginBlock = "auto"
     countersContainer.style.marginInline = "auto"
 
-    let parentCounter = document.createElement("div")
-    parentCounter.style.gridTemplateColumns = "3fr 1fr"
-    parentCounter.style.gridTemplateRows = "1fr 1fr"
-    parentCounter.style.display = "grid"
-    parentCounter.style.width = "5rem"
-
-    let pNumber = document.createElement("div")
-    pNumber.innerHTML = "1"
-    pNumber.style.gridArea = "1 / 1 / 3 / 2"
-    pNumber.style.width = "fit-content"
-    pNumber.style.height = "fit-content"
-    pNumber.style.placeSelf = "center"
-    pNumber.style.fontSize = "30px"
-    parentCounter.appendChild(pNumber)
-
-    let pUpButton = document.createElement("button")
-    pUpButton.style.cursor = "pointer"
-    pUpButton.setAttribute("type", "button")
-    pUpButton.className = "c-button c-button--icon notebook-button"
-    pUpButton.style.gridArea = "1 / 2 / 2 / 3"
-    pUpButton.style.border = "none"
-    pUpButton.style.background = "none"
-    pUpButton.style.height = "15px"
-    pUpButton.style.padding = "0"
-    pUpButton.onclick = () => {
-        let currentNumber = parseInt(pNumber.innerHTML)
-        let newNumber = (currentNumber + 1) % 6
-        if(newNumber === 0) newNumber = 1
-        pNumber.innerHTML = newNumber
-    }
-    let pUpIcon = document.createElement("i")
-    pUpIcon.className = "icon"
-    pUpIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("caret-up-solid-full.svg") + ")"
-    pUpIcon.style.height = "20px"
-    pUpIcon.style.width = "20px"
-    pUpButton.appendChild(pUpIcon)
-    parentCounter.appendChild(pUpButton)
-
-    let pDownButton = document.createElement("button")
-    pDownButton.style.cursor = "pointer"
-    pDownButton.setAttribute("type", "button")
-    pDownButton.className = "c-button c-button--icon notebook-button"
-    pDownButton.style.gridArea = "2 / 2 / 3 / 3"
-    pDownButton.style.border = "none"
-    pDownButton.style.background = "none"
-    pDownButton.style.height = "15px"
-    pDownButton.style.padding = "0"
-    pDownButton.onclick = () => {
-        let currentNumber = parseInt(pNumber.innerHTML)
-        let newNumber = (currentNumber - 1) % 6
-        if(newNumber === 0) newNumber = 5
-        pNumber.innerHTML = newNumber
-    }
-    let pDownIcon = document.createElement("i")
-    pDownIcon.className = "icon"
-    pDownIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("caret-down-solid-full.svg") + ")"
-    pDownIcon.style.height = "20px"
-    pDownIcon.style.width = "20px"
-    pDownButton.appendChild(pDownIcon)
-    parentCounter.appendChild(pDownButton)
-
-    let childCounter = document.createElement("div")
-    childCounter.style.gridTemplateColumns = "3fr 1fr"
-    childCounter.style.gridTemplateRows = "1fr 1fr"
-    childCounter.style.display = "grid"
-    childCounter.style.width = "5rem"
-
-    let cNumber = document.createElement("div")
-    cNumber.innerHTML = "1"
-    cNumber.style.gridArea = "1 / 1 / 3 / 2"
-    cNumber.style.width = "fit-content"
-    cNumber.style.height = "fit-content"
-    cNumber.style.placeSelf = "center"
-    cNumber.style.fontSize = "30px"
-    childCounter.appendChild(cNumber)
-
-    let cUpButton = document.createElement("button")
-    cUpButton.innerHTML = "/\\"
-    cUpButton.style.gridArea = "1 / 2 / 2 / 3"
-    cUpButton.style.border = "none"
-    cUpButton.style.background = "none"
-    cUpButton.onclick = () => {
-        let currentNumber = parseInt(cNumber.innerHTML)
-        let newNumber = (currentNumber + 1) % 6
-        if(newNumber === 0) newNumber = 1
-        cNumber.innerHTML = newNumber
-    }
-    childCounter.appendChild(cUpButton)
-
-    let cDownButton = document.createElement("button")
-    cDownButton.innerHTML = "\\/"
-    cDownButton.style.gridArea = "2 / 2 / 3 / 3"
-    cDownButton.style.border = "none"
-    cDownButton.style.background = "none"
-    cDownButton.onclick = () => {
-        let currentNumber = parseInt(cNumber.innerHTML)
-        let newNumber = (currentNumber - 1) % 6
-        if(newNumber === 0) newNumber = 5
-        cNumber.innerHTML = newNumber
-    }
-    childCounter.appendChild(cDownButton)
+    let parentCounter = makeNewCounter("Adults:")
+    let childCounter = makeNewCounter("Children:")
 
     let submitButton = document.createElement("button")
-    submitButton.innerHTML = "submit"
+    submitButton.setAttribute("type", "button")
+    submitButton.className = "c-button c-button--icon"
+    let submitButtonIcon = document.createElement("i")
+    submitButtonIcon.className = "icon"
+    submitButtonIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("up-right-from-square-solid-full.svg") + ")"
+    submitButtonIcon.style.height = "20px"
+    submitButtonIcon.style.width = "20px"
+    submitButton.appendChild(submitButtonIcon)
     submitButton.onclick = () => {
-        let parentCount = parseInt(pNumber.innerHTML)
-        let childCount = parseInt(cNumber.innerHTML)
+        let parentCount = parseInt(parentCounter.getAttribute("number"))
+        let childCount = parseInt(childCounter.getAttribute("number"))
         attendenceNumber = parentCount + "&" + childCount
 
-        addEntry(date, phoneNumber, emailAddress, parentName, attendenceNumber)
+        console.log(attendenceNumber)
     }
 
     countersContainer.appendChild(parentCounter)
     countersContainer.appendChild(childCounter)
+    countersContainer.appendChild(submitButton)
     
     popupContainer.appendChild(countersContainer)
-    popupContainer.appendChild(submitButton)
 
     let background = document.createElement("div")
     background.classList.add("famswim-background")
@@ -383,4 +293,69 @@ function addFamSwimButton(){
     }
     buttonRow.appendChild(addToFamSwimButton)
 
+}
+
+function makeNewCounter(label){
+    let container = document.createElement("div")
+    container.style.display = "grid"
+    container.style.gridTemplateRows = "1fr 1fr"
+    container.setAttribute("number", "1")
+
+    let labelDiv = document.createElement("p")
+    labelDiv.innerHTML = label
+    labelDiv.style.textAlign = "center"
+    labelDiv.style.fontSize = "20px"
+    container.appendChild(labelDiv)
+
+    let counter = document.createElement("div")
+    counter.style.display = "flex"
+    counter.style.gap = "2rem"
+
+    let number = document.createElement("div")
+    number.innerHTML = "1"
+    number.style.width = "fit-content"
+    number.style.height = "fit-content"
+    number.style.placeSelf = "center"
+    number.style.fontSize = "30px"
+
+    let upButton = document.createElement("button")
+    upButton.setAttribute("type", "button")
+    upButton.className = "c-button c-button--icon"
+    let upIcon = document.createElement("i")
+    upIcon.className = "icon"
+    upIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("plus-solid-full.svg") + ")"
+    upIcon.style.height = "20px"
+    upIcon.style.width = "20px"
+    upButton.appendChild(upIcon)
+    upButton.onclick = () => {
+        let currentNumber = parseInt(number.innerHTML)
+        let newNumber = (currentNumber + 1) % 6
+        if(newNumber === 0) newNumber = 1
+        number.innerHTML = newNumber
+        container.setAttribute("number", newNumber)
+    }
+
+    let downButton = document.createElement("button")
+    downButton.setAttribute("type", "button")
+    downButton.className = "c-button c-button--icon"
+    let downIcon = document.createElement("i")
+    downIcon.className = "icon"
+    downIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("minus-solid-full.svg") + ")"
+    downIcon.style.height = "20px"
+    downIcon.style.width = "20px"
+    downButton.appendChild(downIcon)
+    downButton.onclick = () => {
+        let currentNumber = parseInt(number.innerHTML)
+        let newNumber = (currentNumber - 1) % 6
+        if(newNumber === 0) newNumber = 5
+        number.innerHTML = newNumber
+        container.setAttribute("number", newNumber)
+    }
+
+    counter.appendChild(downButton)
+    counter.appendChild(number)
+    counter.appendChild(upButton)
+    container.appendChild(counter)
+
+    return container
 }

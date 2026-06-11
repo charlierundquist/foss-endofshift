@@ -212,16 +212,20 @@ function addNotebookButton() {
 function addFamSwimButton(){
 
     // get data
-    const parentName = document.querySelector(".u-details__name").getAttribute("title")
+    const nameSplit = document.querySelector(".u-details__name").getAttribute("title").split(", ")
+    const parentName = {
+        first: nameSplit[1],
+        last: nameSplit[0]
+    }
     const phoneNumber = "(" + document.querySelector(".fi-info > div:nth-child(2) > div:nth-child(2)").innerHTML.split("(")[1];
     const emailAddress = document.querySelector(".fi-info > div:nth-child(3) > div:nth-child(2)").getAttribute("title");
     const cssInitials = document.querySelector(".header__admin-name").innerHTML.substring(0,2).toUpperCase();
+    const todaysDate = (new Date().getMonth() + 1) +  "/" + new Date().getDate()
     
     // add to dom
     let popupContainer = document.createElement("div")
     popupContainer.classList.add("famswimpopup")
     popupContainer.style.width = "60ch"
-    popupContainer.style.height = "60ch"
     popupContainer.style.position = "fixed"
     popupContainer.style.zIndex = "500"
     popupContainer.style.top = "50%"
@@ -231,6 +235,13 @@ function addFamSwimButton(){
     popupContainer.style.padding = "3rem"
     popupContainer.style.display = "none"
     document.body.appendChild(popupContainer)
+
+    let titleDiv = document.createElement("h2")
+    titleDiv.innerHTML = "FAMILY SWIM ATTENDANCE"
+    titleDiv.style.fontSize = "2rem"
+    titleDiv.style.textAlign = "center"
+    titleDiv.style.marginBottom = "4rem"
+    popupContainer.appendChild(titleDiv)
 
     let countersContainer = document.createElement("div")
     countersContainer.style.display = "flex"
@@ -246,6 +257,7 @@ function addFamSwimButton(){
     let submitButton = document.createElement("button")
     submitButton.setAttribute("type", "button")
     submitButton.className = "c-button c-button--icon"
+    submitButton.style.alignSelf = "end"
     let submitButtonIcon = document.createElement("i")
     submitButtonIcon.className = "icon"
     submitButtonIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("up-right-from-square-solid-full.svg") + ")"
@@ -255,9 +267,13 @@ function addFamSwimButton(){
     submitButton.onclick = () => {
         let parentCount = parseInt(parentCounter.getAttribute("number"))
         let childCount = parseInt(childCounter.getAttribute("number"))
-        attendenceNumber = parentCount + "&" + childCount
 
-        console.log(attendenceNumber)
+       navigator.clipboard.writeText(parentName.last + "\t" + parentName.first + "\t" + emailAddress + "\t" + phoneNumber + "\t" + parentCount + "\t" + childCount + "\t" + todaysDate + " " + cssInitials)
+
+       submitButtonIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("check-solid-full.svg") + ")"
+       setTimeout(() => {
+            submitButtonIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("up-right-from-square-solid-full.svg") + ")"
+       }, 1000)
     }
 
     countersContainer.appendChild(parentCounter)
@@ -265,6 +281,24 @@ function addFamSwimButton(){
     countersContainer.appendChild(submitButton)
     
     popupContainer.appendChild(countersContainer)
+
+    let instructionsContainer = document.createElement("div")
+    let image = document.createElement("img")
+    image.src = chrome.runtime.getURL("famswim-paste-instructions.jpg")
+    image.style.maxWidth = "100%"
+    image.style.border = "2px solid #777"
+    image.style.marginTop = "4rem"
+    instructionsContainer.appendChild(image)
+
+    let details = document.createElement("p")
+    details.innerHTML = "Adjust the amount of adults and children that will be attending the family swim, then hit the export button to the right. Then, in the family swim spreadsheet, select the column highlighted in the spreadsheet at the lowest available row, then paste(ctrl+v). Double check to make sure that the maximum attendance has not been exceeded!"
+    details.style.fontStyle = "italic"
+    details.style.lineHeight = "1.5"
+    details.style.marginTop = "4rem"
+    details.style.textAlign = "center"
+    instructionsContainer.appendChild(details)
+
+    popupContainer.appendChild(instructionsContainer)
 
     let background = document.createElement("div")
     background.classList.add("famswim-background")
@@ -281,17 +315,22 @@ function addFamSwimButton(){
     document.body.appendChild(background)
 
     let buttonRow = document.querySelector(".fi-parent .fi-buttons-row")
-    let addToFamSwimButton = document.createElement("button")
-    addToFamSwimButton.className = "c-button c-button--icon"
-    addToFamSwimButton.setAttribute("parentName", parentName)
-    addToFamSwimButton.setAttribute("phoneNumber", phoneNumber)
-    addToFamSwimButton.setAttribute("emailAddress", emailAddress)
-    addToFamSwimButton.setAttribute("cssInitials", cssInitials)
-    addToFamSwimButton.onclick = () => {
+    let fsButton = document.createElement("button")
+    fsButton.innerHTML = "Sign up for Family Swim"
+    fsButton.style.border = "none"
+    fsButton.style.background = "none"
+    fsButton.style.textDecoration = "underline"
+    fsButton.style.cursor = "pointer"
+    fsButton.style.color = "#222"
+    fsButton.setAttribute("parentName", parentName)
+    fsButton.setAttribute("phoneNumber", phoneNumber)
+    fsButton.setAttribute("emailAddress", emailAddress)
+    fsButton.setAttribute("cssInitials", cssInitials)
+    fsButton.onclick = () => {
         popupContainer.style.display = "block"
         background.style.display = "block"
     }
-    buttonRow.appendChild(addToFamSwimButton)
+    buttonRow.appendChild(fsButton)
 
 }
 
@@ -304,7 +343,7 @@ function makeNewCounter(label){
     let labelDiv = document.createElement("p")
     labelDiv.innerHTML = label
     labelDiv.style.textAlign = "center"
-    labelDiv.style.fontSize = "20px"
+    labelDiv.style.fontSize = "16px"
     container.appendChild(labelDiv)
 
     let counter = document.createElement("div")

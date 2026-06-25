@@ -12,10 +12,12 @@ function initFunc() {
     let url = '';
     const observer = new MutationObserver(function(mutations) {
         if (location.href !== url) {
+            addNotebookButton();
+            
             url = location.href;
-            if(url.split("/")[url.split("/").length - 1] != "family-information"){
-                return;
-            }
+            // if(url.split("/")[url.split("/").length - 1] != "family-information"){
+            //     return;
+            // }
             let keyframesTag = document.createElement("style")
             keyframesTag.textContent = "@keyframes spinning{to{transform: rotate(1turn)}}"
             document.head.appendChild(keyframesTag)
@@ -39,9 +41,9 @@ function initFunc() {
             buttonsRow.appendChild(copyButton)
             
             getFamilyInfo(url, copyButton);
-            
-            addNotebookButton();
+            checkPreferredLocation();
             addFamSwimButton();
+            makeAccountNumberCopiable();
         }
     });
     const config = {subtree: true, childList: true};
@@ -75,7 +77,7 @@ function getFamilyInfo(url, copyButton){
                 let classDivs = div.querySelectorAll(".c-list-data__row");
                 [...classDivs].map((row, i) => {
 
-                    if(!row.querySelector(".sw-session-col").innerHTML.includes("Spring 2026")){
+                    if(!row.querySelector(".sw-session-col").innerHTML.includes("Summer 2026")){
                         return
                     }
                     let statusColDiv = row.querySelector(".sw-status-col")
@@ -397,4 +399,31 @@ function makeNewCounter(label){
     container.appendChild(counter)
 
     return container
+}
+
+function checkPreferredLocation(){
+    let locationDiv = document.querySelector(".fi-general-information > div:nth-child(2) > .ng-binding")
+    if(locationDiv.innerHTML === "Apple Valley"){
+        return
+    }
+    locationDiv.style.color = "red"
+    locationDiv.innerHTML += " - Change this when enrolling!"
+}
+
+function makeAccountNumberCopiable(){
+    let h1 = document.querySelector("h1")
+    let number = document.querySelector("h1 > span")
+    number.style.cursor = "pointer"
+    number.style.position = "relative"
+    number.onclick = () => {
+        let oldText = number.innerHTML.split("#")[1]
+        navigator.clipboard.writeText(oldText)
+        number.innerHTML = "copied!"
+        number.style.fontStyle = "italic"
+        setTimeout(() => {
+            number.innerHTML = "#" + oldText
+            number.style.fontStyle = "unset"
+        }, 1000);
+        number.appendChild(confirmation)
+    }
 }

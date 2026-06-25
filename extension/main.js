@@ -12,12 +12,14 @@ function initFunc() {
     let url = '';
     const observer = new MutationObserver(function(mutations) {
         if (location.href !== url) {
-            addNotebookButton();
             
             url = location.href;
-            // if(url.split("/")[url.split("/").length - 1] != "family-information"){
-            //     return;
-            // }
+            if(url.split("/")[url.split("/").length - 1] === "login"){
+                    return;
+                }
+
+            addNotebookButton();
+
             let keyframesTag = document.createElement("style")
             keyframesTag.textContent = "@keyframes spinning{to{transform: rotate(1turn)}}"
             document.head.appendChild(keyframesTag)

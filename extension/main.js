@@ -17,6 +17,10 @@ function initFunc() {
             if(url.split("/")[url.split("/").length - 1] === "login"){
                     return;
                 }
+            
+            if(url.endsWith("students")){
+                addMakeupButton()
+            }
 
             addNotebookButton();
 
@@ -213,6 +217,13 @@ function addNotebookButton() {
     buttonRow.prepend(button)
 }
 
+function CSSInfo(){
+    const cssInitials = document.querySelector(".header__admin-name").innerHTML.substring(0,2).toUpperCase();
+    const todaysDate = (new Date().getMonth() + 1) +  "/" + new Date().getDate()
+
+    return todaysDate + " " + cssInitials
+}
+
 function addFamSwimButton(){
 
     // get data
@@ -223,8 +234,6 @@ function addFamSwimButton(){
     }
     const phoneNumber = "(" + document.querySelector(".fi-info > div:nth-child(2) > div:nth-child(2)").innerHTML.split("(")[1];
     const emailAddress = document.querySelector(".fi-info > div:nth-child(3) > div:nth-child(2)").getAttribute("title");
-    const cssInitials = document.querySelector(".header__admin-name").innerHTML.substring(0,2).toUpperCase();
-    const todaysDate = (new Date().getMonth() + 1) +  "/" + new Date().getDate()
     
     // add to dom
     let popupContainer = document.createElement("div")
@@ -272,7 +281,7 @@ function addFamSwimButton(){
         let parentCount = parseInt(parentCounter.getAttribute("number"))
         let childCount = parseInt(childCounter.getAttribute("number"))
 
-       navigator.clipboard.writeText(parentName.last + "\t" + parentName.first + "\t" + emailAddress + "\t" + phoneNumber + "\t" + parentCount + "\t" + childCount + "\t" + todaysDate + " " + cssInitials)
+       navigator.clipboard.writeText(parentName.last + "\t" + parentName.first + "\t" + emailAddress + "\t" + phoneNumber + "\t" + parentCount + "\t" + childCount + "\t" + CSSInfo())
 
        submitButtonIcon.style.backgroundImage = "url(" + chrome.runtime.getURL("check-solid-full.svg") + ")"
        setTimeout(() => {
@@ -329,7 +338,6 @@ function addFamSwimButton(){
     fsButton.setAttribute("parentName", parentName)
     fsButton.setAttribute("phoneNumber", phoneNumber)
     fsButton.setAttribute("emailAddress", emailAddress)
-    fsButton.setAttribute("cssInitials", cssInitials)
     fsButton.onclick = () => {
         popupContainer.style.display = "block"
         background.style.display = "block"
@@ -415,10 +423,10 @@ function checkPreferredLocation(){
 function makeAccountNumberCopiable(){
     let h1 = document.querySelector("h1")
     let number = document.querySelector("h1 > span")
+    let oldText = number.innerHTML.split("#")[1]
     number.style.cursor = "pointer"
     number.style.position = "relative"
     number.onclick = () => {
-        let oldText = number.innerHTML.split("#")[1]
         navigator.clipboard.writeText(oldText)
         number.innerHTML = "copied!"
         number.style.fontStyle = "italic"
@@ -428,4 +436,9 @@ function makeAccountNumberCopiable(){
         }, 1000);
         number.appendChild(confirmation)
     }
+}
+
+function addMakeupButton(){
+    let accountNumber = location.href.split("/details/")[1].split("/")[0]
+    
 }

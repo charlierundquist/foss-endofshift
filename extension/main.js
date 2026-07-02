@@ -440,5 +440,25 @@ function makeAccountNumberCopiable(){
 
 function addMakeupButton(){
     let accountNumber = location.href.split("/details/")[1].split("/")[0]
-    
+
+    let studentsArray = document.querySelectorAll(".sw-student__view")
+    studentsArray.forEach(element => {
+        let name = element.querySelector(".u-details__name").getAttribute("title")
+        let firstName = name.split(", ")[1]
+        let lastInitial = name.substring(0,1)
+
+        let buttonRow = element.querySelector(".row.sw-buttons-row")
+        let makeupButton = document.createElement("button")
+        makeupButton.innerHTML = "Copy Makeup Info"
+        makeupButton.style.border = "none"
+        makeupButton.style.background = "none"
+        makeupButton.style.textDecoration = "underline"
+        makeupButton.style.cursor = "pointer"
+        makeupButton.style.color = "#222"
+        makeupButton.style.marginLeft = "3rem"
+        makeupButton.onclick = () => {
+            navigator.clipboard.writeText(accountNumber + "\t" + firstName + "\t" + lastInitial + "\t" + CSSInfo())
+        }
+        buttonRow.appendChild(makeupButton)
+    });
 }

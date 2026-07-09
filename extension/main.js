@@ -23,6 +23,7 @@ function initFunc() {
             }
 
             addNotebookButton();
+            addNoteShortcuts();
 
             let keyframesTag = document.createElement("style")
             keyframesTag.textContent = "@keyframes spinning{to{transform: rotate(1turn)}}"
@@ -222,6 +223,13 @@ function CSSInfo(){
     const todaysDate = (new Date().getMonth() + 1) +  "/" + new Date().getDate()
 
     return todaysDate + " " + cssInitials
+}
+
+function CSSInfoFullDate(){
+    const cssInitials = document.querySelector(".header__admin-name").innerHTML.substring(0,2).toUpperCase();
+    const todaysDate = (new Date().getMonth() + 1) +  "/" + new Date().getDate() + "/" + new Date().getFullYear().toString().substring(2,4)
+
+    return todaysDate + " " + cssInitials + " - "
 }
 
 function addFamSwimButton(){
@@ -461,4 +469,12 @@ function addMakeupButton(){
         }
         buttonRow.appendChild(makeupButton)
     });
+}
+
+function addNoteShortcuts(){
+    document.addEventListener("keydown", async (e) => {
+        if(e.ctrlKey && e.shiftKey && e.key == ">"){
+            e.target.setRangeText(CSSInfoFullDate(), e.target.selectionStart, e.target.selectionEnd, "end")
+        }
+    })
 }

@@ -347,7 +347,6 @@ function renderNotesBox(data){
         submitEditButton.style.margin = "0px"
         submitEditButton.style.cursor = "pointer"
         submitEditButton.onclick = () => {
-            console.log(filledTextBox.value)
             data.notes = filledTextBox.value
             updateNote(data)
         }

@@ -472,9 +472,27 @@ function addMakeupButton(){
 }
 
 function addNoteShortcuts(){
+    const hasListener = document.getElementById("addNoteShortcutsAdded")
+    if(hasListener != null){
+        return
+    }
+    let newDiv = document.createElement("div")
+    newDiv.id = "addNoteShortcutsAdded"
+    newDiv.style.display = "none"
+    newDiv.style.width = "0px"
+    newDiv.style.height = "0px"
+    document.body.appendChild(newDiv)
+    console.log("added notes shortcuts")
     document.addEventListener("keydown", async (e) => {
         if(e.ctrlKey && e.shiftKey && e.key == ">"){
             e.target.setRangeText(CSSInfoFullDate(), e.target.selectionStart, e.target.selectionEnd, "end")
+            return
+        }
+
+        if(e.ctrlKey && e.key == "Enter") {
+            let noteSubmitButton = document.querySelector(".modal__footer > button.c-button--primary")
+            noteSubmitButton.click()
         }
     })
+
 }
